@@ -10,7 +10,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const uri = process.env.M_URI
+//TODO: Move DB connection to different file
+let uri = process.env.PROD_URI;
+if(process.env.NODE_ENV == 'dev'){
+    uri = process.env.M_URI;
+}
 
 mongoose.connect(uri, {useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true});
 
