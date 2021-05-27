@@ -1,15 +1,13 @@
 FROM node:latest
 
-RUN mkdir -p /user/src/printerstatus
+# Create app directory
+WORKDIR /usr/src/app
 
-WORKDIR /usr/src/printerstatus
-
+# Install app dependencies
 COPY package*.json ./
-
 RUN npm install
 
+# Bundle app source
 COPY . .
 
 EXPOSE 8080
-
-CMD ["npm", "run", "prod"]

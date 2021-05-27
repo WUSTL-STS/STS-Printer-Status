@@ -11,9 +11,9 @@ app.use(cors());
 app.use(express.json());
 
 //TODO: Move DB connection to different file
-let uri = process.env.PROD_URI;
-if(process.env.NODE_ENV == 'dev'){
-    uri = process.env.M_URI;
+let uri = process.env.L_URI;
+if(process.env.DEPLOY == 'docker'){
+    uri = process.env.D_URI;
 }
 
 mongoose.connect(uri, {useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true});

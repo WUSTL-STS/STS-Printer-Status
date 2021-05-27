@@ -1,3 +1,6 @@
+version: "3.9"
+volumes:
+    database:
 services:
     app:
         build:
@@ -7,12 +10,16 @@ services:
             - "8080:8080"
         container_name: printerstatus
         links:
-            - database
-        command: npm run prod
-    database:
+            - mongo
+        environment:
+            - DEPLOY=docker
+        command: node app.js
+    mongo:
         image: mongo
         ports:
             - "27017:27017"
         container_name: mongo
         volumes:
-            - ./db:/data/db:z
+            - database:/data/db
+
+
