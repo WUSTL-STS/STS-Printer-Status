@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const connectDB = require('./config/db')
+
 
 dotenv.config({path: './config/.env'});
 
@@ -17,12 +19,16 @@ connection.once('open', () => {
     console.log("Connected to MongoDB");
 });
 
+//Serve CSS from /public
+app.use(express.static(path.join(__dirname, 'public')))
+app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
+
 //Enable handlebars
-app.engine('.hbs', exphbs({
-    defaultLayout: 'main',
-    extname: '.hbs'
-}))
-app.set('view engine', '.hbs')
+// app.engine('.hbs', exphbs({
+//     defaultLayout: 'main',
+//     extname: '.hbs'
+// }))
+app.set('view engine', 'hbs')
 
 //Routes
 app.use('/', require('./routes/index'))

@@ -15,11 +15,13 @@
   "author": "Jack Heuberger",
   "license": "ISC",
   "dependencies": {
+    "bootstrap": "^5.0.2",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "handlebars": "^4.7.7",
-    "mongoose": "^5.12.11"
+    "hbs": "^4.1.2",
+    "mongoose": "^5.13.3"
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
