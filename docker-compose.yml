@@ -13,7 +13,7 @@ services:
             - mongo
         environment:
             - DEPLOY=docker
-        command: node app.js
+        command: npm run prod
     mongo:
         image: mongo
         ports:
