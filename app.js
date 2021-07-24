@@ -10,22 +10,24 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-//TODO: Move DB connection to different file
-let uri = process.env.L_URI;
-if(process.env.DEPLOY == 'docker'){
-    uri = process.env.D_URI;
-}
-
-mongoose.connect(uri, {useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true});
-
+//Connect to MongoDB
+connectDB()
 const connection = mongoose.connection;
-
 connection.once('open', () => {
     console.log("Connected to MongoDB");
 });
 
+//Enable handlebars
+app.engine('.hbs', exphbs({
+    defaultLayout: 'main',
+    extname: '.hbs'
+}))
+app.set('view engine', '.hbs')
+
+//Routes
 app.use('/', require('./routes/index'))
 
+//Set port
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
     console.log(`Server hosted on port ${port}`);
