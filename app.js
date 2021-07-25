@@ -6,12 +6,17 @@ const exphbs  = require('express-handlebars');
 
 const connectDB = require('./config/db')
 
-
 dotenv.config({path: './config/.env'});
 
 const app = express();
 
+//Enable CORS
 app.use(cors());
+
+//Body parsing
+app.use(express.urlencoded({
+    extended: false
+}))
 app.use(express.json());
 
 //Connect to MongoDB
@@ -35,9 +40,12 @@ app.set('view engine', '.hbs')
 
 //Routes
 app.use('/', require('./routes/index'))
+app.use('/groups', require('./routes/groups'))
+app.use('/printers', require('./routes/printers'))
+app.use('/users', require('./routes/users'))
 
-//Set port
-const port = process.env.PORT || 5000;
+//Expose port
+const port = process.env.PORT || 8080;
 app.listen(port, () => {
     console.log(`Server hosted on port ${port}`);
 });

@@ -1,11 +1,22 @@
 const express = require('express');
 const router = express.Router();
 
-const Job = require('../models/Printer')
+const Printer = require('../models/Printer')
 const User = require('../models/User')
+const Group = require('../models/Group')
 
-router.get('/', (req, res) => {
-    res.render("admin");
+router.get('/', async (req, res) => {
+    try {
+        let groups = await Group.find({}).lean()
+        console.log(groups)
+        res.render('admin', {
+            groups
+        })
+    }
+    catch (err) {
+        console.log(err)
+
+    }
 });
 
 module.exports = router;
