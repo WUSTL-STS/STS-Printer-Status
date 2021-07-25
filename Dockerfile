@@ -1,13 +1,14 @@
 FROM node:latest
 
 # Create app directory
-WORKDIR /usr/src/app
+WORKDIR /app
 
 # Install app dependencies
-COPY package*.json ./
+COPY package.json /app
+
 RUN npm install
 
 # Bundle app source
-COPY . .
+COPY . /app
 
-EXPOSE 8080
+CMD ["npm", "start"]

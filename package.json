@@ -4,8 +4,7 @@
   "description": "Printer status report for STS at Washington University in St. Louis",
   "main": "app.js",
   "scripts": {
-    "dev": "nodemon -L app.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon --legacy-watch app.js",
     "prod": "node app"
   },
   "repository": {
@@ -19,8 +18,10 @@
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "express-handlebars": "^5.3.2",
     "handlebars": "^4.7.7",
     "hbs": "^4.1.2",
+    "jquery": "^3.6.0",
     "mongoose": "^5.13.3"
   },
   "devDependencies": {

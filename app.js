@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const exphbs  = require('express-handlebars');
+
 const connectDB = require('./config/db')
 
 
@@ -20,15 +22,16 @@ connection.once('open', () => {
 });
 
 //Serve CSS from /public
-app.use(express.static(path.join(__dirname, 'public')))
-app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
+app.use('/js', express.static(__dirname + '/node_modules/bootstrap/dist/js')); // redirect bootstrap JS
+app.use('/js', express.static(__dirname + '/node_modules/jquery/dist')); // redirect JS jQuery
+app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css')); // redirect CSS bootstrap
 
 //Enable handlebars
-// app.engine('.hbs', exphbs({
-//     defaultLayout: 'main',
-//     extname: '.hbs'
-// }))
-app.set('view engine', 'hbs')
+app.engine('.hbs', exphbs({
+    defaultLayout: 'main',
+    extname: '.hbs'
+}))
+app.set('view engine', '.hbs')
 
 //Routes
 app.use('/', require('./routes/index'))
