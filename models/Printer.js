@@ -11,6 +11,7 @@ const PrinterSchema = new mongoose.Schema({
     },
     model: {
         type: String,
+        enum: ['M577', 'M578'],
         required: true
     },
     contact: {
@@ -24,7 +25,7 @@ const PrinterSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    
+
     toner: [Number],
     paper: [Boolean],
 

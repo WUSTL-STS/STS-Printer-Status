@@ -1,0 +1,39 @@
+<div class="container">
+    {{#if printer}}
+    {{!-- Prefill all forms, URL will contain ID, an update request will be made to /printers/id --}}
+    <h2>Editing values for the {{Location}} printer</h2>
+    <h3>Printer found</h3>
+    {{else}}
+    <h2>Add a printer</h2>
+    <form action="/printers/add" method="post">
+        <div class="row">
+            <div class="col">
+                <label for="Location">Printer Location</label>
+                <input type="text" class="form-control" id="Location" placeholder="Printer Location" name="location">
+            </div>
+            <div class="col">
+                <label for="url">Printer URL/IP address</label>
+                <input type="url" class="form-control" id="url" placeholder="Printer URL" name="url">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label for="modelSelect">Select a compatible model:</label>
+                <select name="model" id="modelSelect" name="model">
+                    <option value="M577">M577</option>
+                    <option value="M578">M578</option>
+                </select>
+            </div>
+            <div class="col">
+                <label for="user">Select a compatible model:</label>
+                <input list="users">
+                <datalist id="users">
+                    {{#each users}}
+                    <option value="{{firstname}} {{lastname}}">
+                        {{/each}}
+                </datalist>
+            </div>
+        </div>
+    </form>
+    {{/if}}
+</div>

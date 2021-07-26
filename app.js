@@ -2,11 +2,13 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const exphbs  = require('express-handlebars');
+const exphbs = require('express-handlebars');
 
 const connectDB = require('./config/db')
 
-dotenv.config({path: './config/.env'});
+dotenv.config({
+    path: './config/.env'
+});
 
 const app = express();
 

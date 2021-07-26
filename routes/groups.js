@@ -8,31 +8,28 @@ const Group = require('../models/Group')
 router.get('/:id', async (req, res) => {
     try {
         let group = await Group.findById(req.params.id).lean()
-        if (!group){
+        if (!group) {
             return res.render('error/404')
         } else {
-            console.log(group)
             res.render('group', {
                 group,
             })
         }
-    }
-    catch (err) {
+    } catch (err) {
         console.log(err)
         return res.render('error/505')
     }
 })
 
-router.post('/add', async (req,res) => {
-    try{
-        if(req.body.groupName == '' || req.body.groupName == null){
+router.post('/add', async (req, res) => {
+    try {
+        if (req.body.groupName == '' || req.body.groupName == null) {
             return res.render('error/505')
         } else {
             await Group.create(req.body)
             res.redirect('/')
         }
-    }
-    catch (err) {
+    } catch (err) {
         console.log(err)
         return res.render('error/505')
     }
