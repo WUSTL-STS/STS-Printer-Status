@@ -6,10 +6,12 @@ const exphbs = require('express-handlebars');
 
 const connectDB = require('./config/db')
 
+//Load /config/env
 dotenv.config({
     path: './config/.env'
 });
 
+//Define Express app
 const app = express();
 
 //Enable CORS
@@ -40,7 +42,7 @@ app.engine('.hbs', exphbs({
 }))
 app.set('view engine', '.hbs')
 
-//Routes
+//Define route extensions
 app.use('/', require('./routes/index'))
 app.use('/groups', require('./routes/groups'))
 app.use('/printers', require('./routes/printers'))
