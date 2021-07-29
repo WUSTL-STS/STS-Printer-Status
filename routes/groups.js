@@ -5,6 +5,8 @@ const Printer = require('../models/Printer')
 const User = require('../models/User')
 const Group = require('../models/Group')
 
+// Desc: Return information about a specific group at its mongo-assigned ID
+// Route: GET /groups/id
 router.get('/:id', async (req, res) => {
     try {
         let group = await Group.findById(req.params.id).lean()
@@ -21,6 +23,8 @@ router.get('/:id', async (req, res) => {
     }
 })
 
+// Desc: The endpoint for POST requests to define a new printer group
+// Route: POST /groups/add
 router.post('/add', async (req, res) => {
     try {
         if (req.body.groupName == '' || req.body.groupName == null) {

@@ -5,6 +5,8 @@ const Printer = require('../models/Printer')
 const User = require('../models/User')
 const Group = require('../models/Group')
 
+// Desc: Main index page, lists printers and management options. Lets users create new groups.
+// Route: GET /
 router.get('/', async (req, res) => {
     try {
         let groups = await Group.find({}).lean()

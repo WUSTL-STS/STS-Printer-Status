@@ -5,6 +5,8 @@ const Printer = require('../models/Printer')
 const User = require('../models/User')
 const Groups = require('../models/Group')
 
+// Desc: The page where users are listed and can be created
+// Route: GET /users/
 router.get('/', async (req, res) => {
     try {
         res.render('user')
@@ -14,6 +16,8 @@ router.get('/', async (req, res) => {
     }
 })
 
+// Desc: The endpoint at which POST requests are handled to create new users
+// Route: POST /users/add
 router.post('/add', async (req, res) => {
     try {
         console.log(req.body)
