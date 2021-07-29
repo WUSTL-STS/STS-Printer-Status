@@ -8,7 +8,7 @@ const Group = require('../models/Group')
 router.get('/', async (req, res) => {
     try {
         let groups = await Group.find({}).lean()
-        console.log(groups)
+        // console.log(groups)
         res.render('admin', {
             groups
         })
