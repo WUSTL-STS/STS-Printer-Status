@@ -2,6 +2,10 @@
 {{#if groups}}
 {{#each groups}}
 <h3>{{groupName}}</h3>
+<form action="/groups/{{_id}}" method="post">
+        <input type="hidden" name="_method" value="delete">
+        <button type="submit" class="btn btn-danger"><i class="far fa-times-circle"></i></button>
+</form>
 <table class="table">
     <thead>
         <tr>
