@@ -3,6 +3,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const exphbs = require('express-handlebars');
+const methodOverride = require('method-override')
 
 const connectDB = require('./config/db')
 
@@ -22,6 +23,15 @@ app.use(express.urlencoded({
     extended: false
 }))
 app.use(express.json());
+
+//Method Override
+app.use(methodOverride(function (req, res) {
+    if(req.body && typeof req.body === 'object' && '_method' in req.body) {
+        let method = req.body._method
+        delete req.body._method
+        return method
+    }
+}))
 
 //Connect to MongoDB
 connectDB()

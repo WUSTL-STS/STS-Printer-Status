@@ -39,4 +39,19 @@ router.post('/add', async (req, res) => {
     }
 })
 
+router.delete('/:id', async (req, res) => {
+    try {
+        let g = await Group.findById(req.params.id).lean();
+        if(g.printers.length == 0){
+            await Group.deleteOne({ _id: req.params.id })
+            res.redirect('/')
+        } else {
+            console.log("There are still printers in this group!")
+        }
+    } catch (err) {
+        console.log(err)
+        return res.render('error/505')
+    }
+})
+
 module.exports = router
