@@ -4,8 +4,12 @@
     {{#each groups}}
     <form action="/groups/{{_id}}" method="post">
         <input type="hidden" name="_method" value="delete">
-        <h3>{{groupName}}</h3>
-        <button type="submit" class="btn btn-danger"><i class="bi bi-trash-fill"></i></button>
+        <div class="d-flex justify-content-left">
+            <button type="submit" class="btn btn-danger" style="margin-right: 10px"><i
+                    class="bi bi-trash-fill"></i></button>
+            <h3>{{groupName}}</h3>
+        </div>
+
     </form>
     <table class="table">
         <thead>
@@ -32,6 +36,7 @@
     <h1>You haven't created any groups!</h1>
     {{/if}}
 
+    <h3></h3>
     <form action="/groups/add" method="POST">
         <div class="form-group">
             <label for="groupName">Group Name</label>
