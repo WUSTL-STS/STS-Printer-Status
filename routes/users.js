@@ -9,7 +9,10 @@ const Groups = require('../models/Group')
 // Route: GET /users/
 router.get('/', async (req, res) => {
     try {
-        res.render('user')
+        let users = await User.find({}).lean()
+        res.render('user', {
+            users
+        })
     } catch (err) {
         console.log(err)
         return res.render('error/505')
@@ -25,8 +28,21 @@ router.post('/add', async (req, res) => {
             return res.render('error/505')
         } else {
             await User.create(req.body)
-            res.redirect('/')
+            res.redirect('/users/')
         }
+    } catch (err) {
+        console.log(err)
+        return res.render('error/505')
+    }
+})
+
+// Desc: The endpoint for DELETE requests to delete users.
+// Route: DELETE /groups/:id
+router.delete('/:id', async (req, res) => {
+    try {
+        let g = await User.findById(req.params.id).lean();
+        await User.deleteOne({ _id: req.params.id })
+        res.redirect('/users')
     } catch (err) {
         console.log(err)
         return res.render('error/505')

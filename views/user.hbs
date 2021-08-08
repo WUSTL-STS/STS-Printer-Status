@@ -1,4 +1,5 @@
 <div class="container">
+    <h3>Add a new user:</h3>
     <form action="/users/add" method="POST">
         <div class="form-row">
             <div class="col">
@@ -15,4 +16,32 @@
         </div>
         <input type="submit" value="Post" class="btn btn-primary">
     </form>
+    {{#if users}}
+    <h3>Existing users:</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">First</th>
+                <th scope="col">Last</th>
+                <th scope="col">Email</th>
+                <th scope="col">Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each users}}
+            <tr>
+                <td>{{firstname}}</td>
+                <td>{{lastname}}</td>
+                <td>{{email}}</td>
+                <td>
+                    <form action="/users/{{_id}}" method="post">
+                        <input type="hidden" name="_method" value="delete">
+                        <button type="submit" class="btn btn-danger"><i class="bi bi-trash-fill"></i></button>
+                    </form>
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+    {{/if}}
 </div>
