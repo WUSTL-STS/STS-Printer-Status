@@ -39,6 +39,8 @@ router.post('/add', async (req, res) => {
     }
 })
 
+// Desc: The endpoint for DELETE requests to delete printer groups. Groups can only be deleted when they are empty.
+// Route: DELETE /groups/:id
 router.delete('/:id', async (req, res) => {
     try {
         let g = await Group.findById(req.params.id).lean();

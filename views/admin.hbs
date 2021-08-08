@@ -1,9 +1,9 @@
 <h1>STS Printer Status Report</h1>
 {{#if groups}}
 {{#each groups}}
-<h3>{{groupName}}</h3>
 <form action="/groups/{{_id}}" method="post">
     <input type="hidden" name="_method" value="delete">
+    <h3>{{groupName}}</h3>
     <button type="submit" class="btn btn-danger"><i class="bi bi-trash-fill"></i></button>
 </form>
 <table class="table">

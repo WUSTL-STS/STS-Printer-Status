@@ -55,4 +55,5 @@ router.post('/add', async (req, res) => {
         return res.render('error/505')
     }
 })
+
 module.exports = router
