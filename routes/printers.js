@@ -47,14 +47,10 @@ router.post('/add', async (req, res) => {
         //Update the group to contain the printer
         var groupQuery = {}
         groupQuery['groupName'] = req.body.group
-        console.log(groupQuery)
         let printerGroup = await Group.findOne(groupQuery)
-        console.log(printerGroup)
         printerGroup.printers.push(newPrinter)
         await printerGroup.save()
-        console.log(printerGroup)
-        // console.log(newPrinter)
-        // res.redirect('/')
+        res.redirect('/')
     } catch (err) {
         console.log(err)
         return res.render('error/505')
