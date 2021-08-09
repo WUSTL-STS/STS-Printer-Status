@@ -28,7 +28,12 @@
             {{#each printers}}
             <tr>
                 <td scope="col"><a class="btn btn-outline-primary" role="button"><i class="bi bi-pencil"></i></a></td>
-                <td scope="col"><a class="btn btn-danger" role="button"><i class="bi bi-trash-fill"></i></a></td>
+                <td scope="col">
+                    <form action="/printers/{{_id}}" method="post">
+                        <input type="hidden" name="_method" value="delete">
+                        <button type="submit" class="btn btn-danger"><i class="bi bi-trash-fill"></i></button>
+                    </form>
+                </td>
                 <td scope="col">{{location}}</td>
                 <td scope="col"><a href="{{url}}">{{url}}</a></td>
                 <td scope="col">{{model}}</td>

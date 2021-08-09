@@ -25,13 +25,11 @@
                 </select>
             </div>
             <div class="col">
-                <label for="user">Select a user:</label>
-                <input list="users" name="user">
-                <datalist id="users">
+                <label for="userSelect">Select a user:</label>
+                <select list="users" name="user" id="userSelect">
                     {{#each users}}
-                    <option value="{{firstname}} {{lastname}}"></option>
+                    <option value="{{firstname}} {{lastname}}">{{firstname}} {{lastname}}</option>
                     {{/each}}
-                </datalist>
             </div>
         </div>
         <div class="row">

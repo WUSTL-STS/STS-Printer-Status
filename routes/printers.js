@@ -3,14 +3,13 @@ const router = express.Router();
 
 const Printer = require('../models/Printer')
 const User = require('../models/User')
-const Groups = require('../models/Group');
 const Group = require('../models/Group');
 
 // Desc: Loads the page where new printers can be created
 // Route: GET /printers/add
 router.get('/add', async (req, res) => {
     try {
-        let groups = await Groups.find({}).lean()
+        let groups = await Group.find({}).lean()
         let users = await User.find({}).lean()
         res.render('printer', {
             groups,
@@ -67,7 +66,7 @@ router.post('/add', async (req, res) => {
 router.get('/:id', async (req, res) => {
     try {
         let printer = await Printer.findById(req.params.id).lean()
-        let groups = await Groups.find({}).lean()
+        let groups = await Group.find({}).lean()
         let users = await Users.find({}).lean()
 
         if (!printer) {
@@ -80,6 +79,17 @@ router.get('/:id', async (req, res) => {
                 users
             })
         }
+    } catch (err) {
+        console.log(err)
+        return res.render('error/505')
+    }
+})
+
+router.delete('/:id', async (req, res) => {
+    try {
+        await Printer.deleteOne({ _id: req.params.id })
+        res.redirect('/')
+        
     } catch (err) {
         console.log(err)
         return res.render('error/505')

@@ -40,9 +40,14 @@ router.post('/add', async (req, res) => {
 // Route: DELETE /groups/:id
 router.delete('/:id', async (req, res) => {
     try {
-        let g = await User.findById(req.params.id).lean();
-        await User.deleteOne({ _id: req.params.id })
-        res.redirect('/users')
+        let userPrinters = await Printer.find({ contact: req.params.id })
+        if(userPrinters){
+            return res.render('error/505')
+        } else {
+            await User.deleteOne({ _id: req.params.id })
+            res.redirect('/users')
+        }
+
     } catch (err) {
         console.log(err)
         return res.render('error/505')
