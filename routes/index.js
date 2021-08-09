@@ -9,7 +9,7 @@ const Group = require('../models/Group')
 // Route: GET /
 router.get('/', async (req, res) => {
     try {
-        let groups = await Group.find({}).lean()
+        let groups = await Group.find({}).populate({path: 'printers', populate: { path: 'contact '}}).lean()
         console.log(groups)
         res.render('admin', {
             groups

@@ -26,14 +26,25 @@
             </div>
             <div class="col">
                 <label for="user">Select a user:</label>
-                <input list="users">
+                <input list="users" name="user">
                 <datalist id="users">
                     {{#each users}}
-                    <option value="{{firstname}} {{lastname}}">
-                        {{/each}}
+                    <option value="{{firstname}} {{lastname}}"></option>
+                    {{/each}}
                 </datalist>
             </div>
         </div>
+        <div class="row">
+            <div class="col">
+                <label for="groupSelect">Group:</label>
+                <select name="group" id="groupSelect" name="group">
+                    {{#each groups}}
+                    <option value="{{groupName}}">{{groupName}}</option>
+                    {{/each}}
+                </select>
+            </div>
+        </div>
+        <input type="submit" value="Post" class="btn btn-primary">
     </form>
     {{/if}}
 </div>

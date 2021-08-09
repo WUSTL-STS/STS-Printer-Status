@@ -21,13 +21,13 @@ const PrinterSchema = new mongoose.Schema({
     email: {
         type: Boolean
     },
-    id: {
-        type: Number,
-        required: true
-    },
+    // id: {
+    //     type: Number,
+    //     required: true
+    // },
 
-    toner: [Number],
-    paper: [Boolean],
+    toner: [Number], // blk, cyn, mag, yel, fuser
+    paper: [Boolean], //tray 2, 3, 4, 5
 
 })
 
