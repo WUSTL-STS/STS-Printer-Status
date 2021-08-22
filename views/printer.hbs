@@ -1,9 +1,4 @@
 <div class="container">
-    {{#if printer}}
-    {{!-- Prefill all forms, URL will contain ID, an update request will be made to /printers/id --}}
-    <h2>Editing values for the {{location}} printer</h2>
-    <h3>Printer found</h3>
-    {{else}}
     <h2>Add a printer</h2>
     <form action="/printers/add" method="post">
         <div class="row">
@@ -45,5 +40,4 @@
         </div>
         <input type="submit" value="Post" class="btn btn-primary">
     </form>
-    {{/if}}
 </div>

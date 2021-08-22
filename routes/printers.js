@@ -69,30 +69,6 @@ router.post('/add', async (req, res) => {
     }
 })
 
-// Desc: Return information about a specific printer
-// Route: GET /printers/:id
-router.get('/:id', async (req, res) => {
-    try {
-        let printer = await Printer.findById(req.params.id).lean()
-        let groups = await Group.find({}).lean()
-        let users = await User.find({}).lean()
-
-        if (!printer) {
-            return res.render('error/404')
-        } else {
-            console.log(printer)
-            res.render('printer', {
-                printer,
-                groups,
-                users
-            })
-        }
-    } catch (err) {
-        console.log(err)
-        return res.render('error/505')
-    }
-})
-
 // Desc: Delete a printer
 // Route: DELETE /printers/:id
 router.delete('/:id', async (req, res) => {
