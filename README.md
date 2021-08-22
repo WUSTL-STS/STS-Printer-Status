@@ -10,7 +10,7 @@ This version of the app uses a MongoDB database to store data about the printers
 
 ### Running Locally
 
-To run locally, first install [docker](https://docs.docker.com/get-docker/) and [docker compose](https://docs.docker.com/compose/install/) (note - Mac users do not need to install compose separately). clone the repository and cd into the directory. Run `docker-compose up --build` to build and run the app along with a MongoDB database. The app will be available at <https://localhost:8080>.
+To run locally, first install [docker](https://docs.docker.com/get-docker/) and [docker compose](https://docs.docker.com/compose/install/) (note - Mac users do not need to install compose separately). Clone the repository and cd into the directory. Run `docker-compose up --build` to build and run the app along with a MongoDB database. The app will be available at <https://localhost:8080>.
 
 For some reason the past few times I've compiled the program for the first time using docker compose, I've gotten an error saying the container for node:latest could not be fetched. In that case, run `docker pull node:latest` and try again.
 
