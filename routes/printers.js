@@ -5,6 +5,18 @@ const Printer = require('../models/Printer')
 const User = require('../models/User')
 const Group = require('../models/Group');
 
+router.get('/', async (req, res) => {
+    try {
+        let printers = await Printer.find({}).lean()
+        console.log(printers)
+        res.redirect('/')
+    }
+    catch (err) {
+        console.log(err)
+        res.redirect('error/505')
+    }
+})
+
 // Desc: Loads the page where new printers can be created
 // Route: GET /printers/add
 router.get('/add', async (req, res) => {
@@ -58,12 +70,12 @@ router.post('/add', async (req, res) => {
 })
 
 // Desc: Return information about a specific printer
-// Route: /printers/:id
+// Route: GET /printers/:id
 router.get('/:id', async (req, res) => {
     try {
         let printer = await Printer.findById(req.params.id).lean()
         let groups = await Group.find({}).lean()
-        let users = await Users.find({}).lean()
+        let users = await User.find({}).lean()
 
         if (!printer) {
             return res.render('error/404')
@@ -81,11 +93,27 @@ router.get('/:id', async (req, res) => {
     }
 })
 
+// Desc: Delete a printer
+// Route: DELETE /printers/:id
 router.delete('/:id', async (req, res) => {
     try {
         await Printer.deleteOne({ _id: req.params.id })
         res.redirect('/')
         
+    } catch (err) {
+        console.log(err)
+        return res.render('error/505')
+    }
+})
+
+// Desc: Switch a printer's email status
+// Route: PUT /printers/:id/email
+router.put('/:id/email', async (req, res) => {
+    try {
+        let updateP = await Printer.findById(req.params.id)
+        updateP.email = !updateP.email
+        await updateP.save()
+        res.redirect('/')
     } catch (err) {
         console.log(err)
         return res.render('error/505')

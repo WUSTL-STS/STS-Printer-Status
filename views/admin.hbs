@@ -38,7 +38,23 @@
                 <td scope="col"><a href="{{url}}">{{url}}</a></td>
                 <td scope="col">{{model}}</td>
                 <td scope="col">{{contact.firstname}} {{contact.lastname}}</td>
-                <td scope="col">{{email}}</td>
+                <td class="col">
+                    <form action="/printers/{{_id}}/email" method="post">
+                        <input type="hidden" name="_method" value="put">
+                        {{#if email}}
+                        <button class="btn btn-success" type="submit"><i class="bi bi-envelope-fill"></i></button>
+                        {{else}}
+                        <button class="btn btn-danger" type="submit"><i class="bi bi-envelope"></i></button>
+                        {{/if}}
+                    </form>
+                </td>
+
+                {{!-- {{#if email}}
+                <td scope="col"><a href="/printers/{{_id}}/email" class="btn btn-success">BTN</a></td>
+                {{else}}
+                <td scope="col"><a href="/printers/{{_id}}/email" class="btn btn-danger">BTN</a></td>
+                {{/if}} --}}
+
             </tr>
             {{/each}}
         </thead>

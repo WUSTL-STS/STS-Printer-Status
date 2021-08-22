@@ -19,7 +19,8 @@ const PrinterSchema = new mongoose.Schema({
         ref: 'User'
     },
     email: {
-        type: Boolean
+        type: Boolean,
+        default: 'False'
     },
     // id: {
     //     type: Number,
