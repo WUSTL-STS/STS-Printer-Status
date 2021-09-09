@@ -11,7 +11,11 @@ router.get('/:id', async (req, res) => {
     try {
         let group = await Group.findById(req.params.id).lean()
         if (!group) {
-            return res.render('error/404')
+            req.session.message = {
+                type: 'warning',
+                title: 'I don\'t recognize that group ID :(',
+            }
+            res.redirect('/')
         } else {
             res.render('group', {
                 group,
@@ -28,9 +32,17 @@ router.get('/:id', async (req, res) => {
 router.post('/add', async (req, res) => {
     try {
         if (req.body.groupName == '' || req.body.groupName == null) {
-            return res.render('error/505')
+            req.session.message = {
+                type: 'danger',
+                title: 'No name was entered :(',
+            }
+            res.redirect('/')
         } else {
             await Group.create(req.body)
+            req.session.message = {
+                type: 'primary',
+                message: 'Success!'
+            }
             res.redirect('/')
         }
     } catch (err) {
@@ -46,9 +58,17 @@ router.delete('/:id', async (req, res) => {
         let g = await Group.findById(req.params.id).lean();
         if(g.printers.length == 0){
             await Group.deleteOne({ _id: req.params.id })
+            req.session.message = {
+                type: 'success',
+                message: 'Success!'
+            }
             res.redirect('/')
         } else {
-            console.log("There are still printers in this group!")
+            req.session.message = {
+                type: 'warning',
+                title: 'There are still printers in this group!',
+            }
+            res.redirect('/')
         }
     } catch (err) {
         console.log(err)

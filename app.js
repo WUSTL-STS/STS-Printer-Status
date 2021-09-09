@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const exphbs = require('express-handlebars');
 const methodOverride = require('method-override')
+var cookieParser = require('cookie-parser')
+const session = require('express-session')
 
 const connectDB = require('./config/db')
 
@@ -23,6 +25,15 @@ app.use(express.urlencoded({
     extended: false
 }))
 app.use(express.json());
+
+//Flash messages
+app.use(cookieParser('th3bl@ckWidow'));
+app.use(session({ cookie: { maxAge: 60000 }}));
+app.use((req, res, next)=>{
+    res.locals.message = req.session.message
+    delete req.session.message
+    next()
+  })
 
 //Method Override
 app.use(methodOverride(function (req, res) {

@@ -62,6 +62,10 @@ router.post('/add', async (req, res) => {
         let printerGroup = await Group.findOne(groupQuery)
         printerGroup.printers.push(newPrinter)
         await printerGroup.save()
+        req.session.message = {
+            type: 'success',
+            message: 'Success!'
+        }
         res.redirect('/')
     } catch (err) {
         console.log(err)
@@ -74,8 +78,11 @@ router.post('/add', async (req, res) => {
 router.delete('/:id', async (req, res) => {
     try {
         await Printer.deleteOne({ _id: req.params.id })
+        req.session.message = {
+            type: 'success',
+            message: 'Success!'
+        }
         res.redirect('/')
-        
     } catch (err) {
         console.log(err)
         return res.render('error/505')

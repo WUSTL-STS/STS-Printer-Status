@@ -25,9 +25,17 @@ router.post('/add', async (req, res) => {
     try {
         console.log(req.body)
         if (req.body.firstname == '' || req.body.firstname == null || req.body.lastname == '' || req.body.lastname == null) {
-            return res.render('error/505')
+            req.session.message = {
+                type: 'danger',
+                title: 'Please fill out ALL the required forms!',
+            }
+            res.redirect('/users/add')
         } else {
             await User.create(req.body)
+            req.session.message = {
+                type: 'primary',
+                message: 'Success!'
+            }
             res.redirect('/users/')
         }
     } catch (err) {
@@ -42,9 +50,18 @@ router.delete('/:id', async (req, res) => {
     try {
         let userPrinters = await Printer.find({ contact: req.params.id })
         if(userPrinters){
-            return res.render('error/505')
+            req.session.message = {
+                type: 'danger',
+                title: 'This user is still associated with some printers!',
+                message: 'Please delete the printers that this user is associated with before deleting this user.'
+            }
+            res.redirect('/users')
         } else {
             await User.deleteOne({ _id: req.params.id })
+            req.session.message = {
+                type: 'primary',
+                message: 'Success!'
+            }
             res.redirect('/users')
         }
 

@@ -21,4 +21,13 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.get('/flash', function(req, res){
+    // Set a flash message by passing the key, followed by the value, to req.flash().
+    req.session.message = {
+        type: 'danger',
+        message: 'Holy Guacamole!'
+    }
+    res.redirect('/')
+  });
+
 module.exports = router;
