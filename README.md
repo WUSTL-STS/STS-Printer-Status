@@ -23,6 +23,14 @@ You technically don't need docker to run the app. Install a local instance of mo
 - 1.3.6.1.2.1.1.5.0 -- Tray levels. 0 is none, -3 is some amount of paper left. [Bypass, 2, 3, 4, 5]
 - 1.3.6.1.2.1.43.11.1.1.9.1 -- Toner levels. [Blk, Cyn, Mag, Yel, image transfer, fuser, document]
 
+(see this reddit article for information https://www.reddit.com/r/sysadmin/comments/1qq73y/how_to_monitor_hp_tonerpaper_levels_through_snmp/)
+
+## SNMP command
+
+To run the command to pull the data from the computer the following command should be followed
+
+snmpwalk -c public [IP_address] [OID]
+
 # TODO
 
 - Edit printer values without fully deleting the printer
