@@ -2,10 +2,10 @@ let fs = require('fs')
 
 function generateTable(g) {
     console.log(g.groupName)
-    fs.open("./output/" + g.groupName + ".html", "w", (err, file) => {
+    fs.writeFile("./public/tables/" + g.groupName + ".html", "Hello World!", (err) => {
         if (err)
             throw err
-        console.log('saved!', file)
+        console.log('saved!')
     })
 }
 module.exports = generateTable

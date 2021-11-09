@@ -14,7 +14,7 @@ services:
         environment:
             - DEPLOY=docker
         volumes:
-            - /app/printer_status/output:/app/output/
+            - ./public/tables:/app/public/tables
     mongo:
         image: mongo
         ports:
