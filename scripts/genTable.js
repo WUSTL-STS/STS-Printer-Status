@@ -9,12 +9,32 @@ function generateTable(g) {
         for (let p of g.printers) {
             table += "<tr><th scope=\"row\">" + p.location + "</th>"
             for (let i = 0; i < p.toner.length; i++) {
-                table += "<td>" + (p.toner[i] === undefined ? "UNKNOWN" : p.toner[i]) + "</td>";
+                if (p.toner[i] === undefined) {
+                    table += "<td class=\"table-warning\">UNKNOWN</td>"
+                } else {
+                    if (p.toner[i] <= 10) {
+                        table += "<td class=\"table-danger\">"
+                    } else {
+                        table += "<td>"
+                    }
+                    table += p.toner[i] + "</td>"
+
+                }
             }
             for (let i = 0; i < p.paper.length; i++) {
-                table += "<td>" + (p.toner[i] === undefined ? "UNKNOWN" : p.toner[i]) + "</td>";
+                if (p.paper[i] === undefined) {
+                    table += "<td class=\"table-warning\">UNKNOWN</td>"
+                } else {
+                    if (p.paper[i] == false) {
+                        table += "<td class=\"table-danger\">"
+                    } else {
+                        table += "<td>"
+                    }
+                    table += p.paper[i] + "</td>"
+
+                }
             }
-            table += "<td>" + p.status + "</td>"
+            table += "<td>" + (p.status == null ? "" : p.status) + "</td>"
             table += "<td>" + p.model + "</td>"
         }
     }
