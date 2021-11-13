@@ -1,12 +1,13 @@
 let fs = require('fs')
 
 function generateTable(g) {
-    let table = "<table><tbody><tr><th colspan=\"100\" alighn=\"center\">" + g.groupName + "</th></tr><tr><th>Location</th><th>Black</th><th>Cyan</th><th>Magenta</th><th>Yellow</th><th>Fuser</th><th>Tray2</th><th>Tray3</th><th>Tray4</th><th>Tray5</th><th>Status</th><th>Model</th></tr>"
+
+    let table = "<link href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css\" rel=\"stylesheet\" integrity=\"sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3\" crossorigin=\"anonymous\"><table class=\"table table-striped\"><tbody><tr><th colspan=\"100\" style=\"text-align: center\">" + g.groupName + "</th></tr><tr><th>Location</th><th>Black</th><th>Cyan</th><th>Magenta</th><th>Yellow</th><th>Fuser</th><th>Tray2</th><th>Tray3</th><th>Tray4</th><th>Tray5</th><th>Status</th><th>Model</th></tr>"
     if (g.printers.length == 0) {
         table += "<tr><th colspan=\"100\" alighn=\"center\">There are no printers in this group!</th></tr>"
     } else {
         for (let p of g.printers) {
-            table += "<tr><td>" + p.location + "</td>"
+            table += "<tr><th scope=\"row\">" + p.location + "</th>"
             for (let i = 0; i < p.toner.length; i++) {
                 table += "<td>" + (p.toner[i] === undefined ? "UNKNOWN" : p.toner[i]) + "</td>";
             }
