@@ -30,6 +30,10 @@ const PrinterSchema = new mongoose.Schema({
     toner: [Number], // blk, cyn, mag, yel, fuser
     paper: [Boolean], //tray 2, 3, 4, 5
 
+    status: {
+        type: String,
+    }
+
 })
 
 module.exports = mongoose.model('Printer', PrinterSchema)
