@@ -13,6 +13,8 @@ services:
             - mongo
         environment:
             - DEPLOY=docker
+        volumes:
+            - ./public/tables:/app/public/tables
     mongo:
         image: mongo
         ports:

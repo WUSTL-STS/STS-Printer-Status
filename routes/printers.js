@@ -54,6 +54,8 @@ router.post('/add', async (req, res) => {
         newPrinter.url = req.body.url
         newPrinter.model = req.body.model
         newPrinter.contact = contactUser
+        newPrinter.toner = [0,0,0,0,0]
+        newPrinter.paper = [true,true,true,true]
         await newPrinter.save()
 
         //Update the group to contain the printer
