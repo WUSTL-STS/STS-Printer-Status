@@ -25,7 +25,9 @@ You technically don't need docker to run the app. Install a local instance of mo
 
 (see the following articles for information 
 - https://www.reddit.com/r/sysadmin/comments/1qq73y/how_to_monitor_hp_tonerpaper_levels_through_snmp/
-- https://secure.n-able.com/webhelp/nc_7-2-0_cust_en/content/n-central/Services/Services_PrinterPaperSupplyLevel.html)
+- https://secure.n-able.com/webhelp/nc_7-2-0_cust_en/content/n-central/Services/Services_PrinterPaperSupplyLevel.html
+- https://iphostmonitor.com/monitoring-toner-level-in-snmp-capable-hp-printer.html
+)
 
 ## SNMP command
 
