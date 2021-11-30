@@ -13,9 +13,10 @@ const generateTable = require('../scripts/genTable')
 router.get('/', async (req, res) => {
     try {
         let groups = await Group.find({}).populate({ path: 'printers', populate: { path: 'contact ' } }).lean()
-        for (g of groups) {
-            generateTable(g)
-        }
+        // for (g of groups) {
+        //     generateTable(g)
+        // }
+        update();
         res.render('admin', {
             groups
         })
