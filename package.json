@@ -27,7 +27,7 @@
     "jquery": "^3.6.0",
     "method-override": "^3.0.0",
     "mongoose": "^5.13.3",
-    "net-snmp": "^3.5.4"
+    "snmp-native": "^1.2.0"
   },
   "devDependencies": {
     "cross-env": "^7.0.3",

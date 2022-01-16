@@ -27,8 +27,13 @@ app.use(express.urlencoded({
 app.use(express.json());
 
 //Flash messages
-app.use(cookieParser('th3bl@ckWidow'));
-app.use(session({ cookie: { maxAge: 60000 }}));
+app.use(cookieParser("" + process.env.COOKIE_SECRET));
+app.use(session({
+    resave: true,
+    saveUninitialized: true,
+    secret: "" + process.env.SESSION_SECRET,
+    cookie: { maxAge: 60000 }}));
+    
 app.use((req, res, next)=>{
     res.locals.message = req.session.message
     delete req.session.message
