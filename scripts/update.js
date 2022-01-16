@@ -1,26 +1,25 @@
-let snmp = require("net-snmp");
+let snmp = require("snmp-native");
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
 function update() {
 
-    let session = snmp.createSession("172.17.19.243");
+    var session = new snmp.Session({host: "172.17.19.243"});
 
-    // const tonerOids = ["1.3.6.1.2.1.43.11.1.1.9.1.1", "1.3.6.1.2.1.43.11.1.1.9.1.2", "1.3.6.1.2.1.43.11.1.1.9.1.3", "1.3.6.1.2.1.43.11.1.1.9.1.4", "1.3.6.1.2.1.43.11.1.1.9.1.5"]
-    const tonerOids = ["1.3.6.1.2.1.43.11.1.1.9.1.1"]
-    console.log("Running get on 172.17.19.243")
-    session.get(tonerOids, (error, varbinds) => {
+    session.get({oid: [1,3,6,1,2,1,43,11,1,1,9,1,1]}, function(error, varbinds) {
         if (error) {
-            console.error(error.toString());
+            console.log(error)
+            console.log('Fail :(');
         } else {
-            for (let i = 0; i < varbinds.length; i++) {
-                // for version 1 we can assume all OIDs were successful
-                console.log(varbinds[i].oid + "|" + varbinds[i].value);
-            }
+            console.log(varbinds[0].oid + ' = ' + varbinds[0].value + ' (' + varbinds[0].type + ')');
         }
     })
 
-    session.close()
+    //session.close()
+    
+    // const tonerOids = ["1.3.6.1.2.1.43.11.1.1.9.1.1", "1.3.6.1.2.1.43.11.1.1.9.1.2", "1.3.6.1.2.1.43.11.1.1.9.1.3", "1.3.6.1.2.1.43.11.1.1.9.1.4", "1.3.6.1.2.1.43.11.1.1.9.1.5"]
+
 }
+
 
 module.exports = update
