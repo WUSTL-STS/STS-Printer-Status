@@ -8,6 +8,7 @@ async function updateValues() {
     let printers = await Printer.find();
     for(let i = 0; i < printers.length; i++){
         session = new snmp.Session({host: printers[i].url})
+        console.log("fetching " + printers[i].location + " values")
         let toner = await fetchToner()
         let paper = await fetchPaper()
         console.log(toner)
