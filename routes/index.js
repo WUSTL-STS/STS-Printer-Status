@@ -5,9 +5,6 @@ const Printer = require('../models/Printer')
 const User = require('../models/User')
 const Group = require('../models/Group')
 
-const updateValues = require('../scripts/update')
-const generateTable = require('../scripts/genTable')
-
 // Desc: Main index page, lists printers and management options. Lets users create new groups.
 // Route: GET /
 router.get('/', async (req, res) => {

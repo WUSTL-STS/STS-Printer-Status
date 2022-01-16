@@ -6,8 +6,11 @@ const exphbs = require('express-handlebars');
 const methodOverride = require('method-override')
 const cookieParser = require('cookie-parser');
 const session = require('express-session')
+const cron = require('node-cron')
 
 const connectDB = require('./config/db')
+const updateValues = require('./scripts/update')
+const generateTable = require('./scripts/genTable')
 
 //Load /config/env
 dotenv.config({
@@ -80,3 +83,11 @@ const port = process.env.PORT || 8080;
 app.listen(port, () => {
     console.log(`Server hosted on port ${port}`);
 });
+
+console.log("scheduling scripts...")
+cron.schedule('* * * * *', async () => {
+    console.log("Updating printer values...")
+    await updateValues()
+    console.log("Generating table...")
+    await generateTable()
+})
