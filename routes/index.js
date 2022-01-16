@@ -5,7 +5,7 @@ const Printer = require('../models/Printer')
 const User = require('../models/User')
 const Group = require('../models/Group')
 
-const update = require('../scripts/update')
+const updateValues = require('../scripts/update')
 const generateTable = require('../scripts/genTable')
 
 // Desc: Main index page, lists printers and management options. Lets users create new groups.
@@ -14,9 +14,8 @@ router.get('/', async (req, res) => {
     try {
         let groups = await Group.find({}).populate({ path: 'printers', populate: { path: 'contact ' } }).lean()
         // for (g of groups) {
-        //     generateTable(g)
+        //     await generateTable(g)
         // }
-        update();
         res.render('admin', {
             groups
         })
@@ -34,5 +33,18 @@ router.get('/flash', function (req, res) {
     }
     res.redirect('/')
 });
+
+router.get('/fetch', async function(req, res) {
+    updateValues()
+    res.redirect('/')
+})
+
+router.get('/table', async function(req, res) {
+    let groups = await Group.find({}).populate({ path: 'printers', populate: { path: 'contact ' } }).lean()
+    for (g of groups) {
+        await generateTable(g)
+    }
+    res.redirect('/')
+})
 
 module.exports = router;

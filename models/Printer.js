@@ -27,7 +27,7 @@ const PrinterSchema = new mongoose.Schema({
     //     required: true
     // },
 
-    toner: [Number], // blk, cyn, mag, yel, fuser
+    toner: [Number], // blk, cyn, mag, yel, fuser, status?, feeder?, img transfer?
     paper: [Boolean], //tray 2, 3, 4, 5
 
     status: {

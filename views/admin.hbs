@@ -2,6 +2,8 @@
     <h1>STS Printer Status Admin Panel</h1>
     <a class="btn btn-secondary" href="/users/" role="button">Edit Users</a>
     <a class="btn btn-secondary" href="/printers/add" role="button">Add a Printer</a>
+    <a class="btn btn-secondary" href="/fetch" role="button">Fetch</a>
+    <a class="btn btn-secondary" href="/table" role="button">Generate Table</a>
     {{#if groups}}
     <h3>Groups:</h3>
     {{#each groups}}
@@ -29,7 +31,7 @@
             {{#each printers}}
             <tr>
                 <td scope="col">{{location}}</td>
-                <td scope="col"><a href="{{url}}">{{url}}</a></td>
+                <td scope="col"><a href="https://{{url}}">{{url}}</a></td>
                 <td scope="col">{{model}}</td>
                 <td scope="col">{{contact.firstname}} {{contact.lastname}}</td>
                 <td class="col">

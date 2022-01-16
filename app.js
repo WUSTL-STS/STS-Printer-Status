@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const exphbs = require('express-handlebars');
 const methodOverride = require('method-override')
-var cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser');
 const session = require('express-session')
 
 const connectDB = require('./config/db')
