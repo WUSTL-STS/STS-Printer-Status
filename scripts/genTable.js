@@ -10,20 +10,22 @@ function generateTable(g) {
     } else {
         //I decided to use for loops because it was significantly cleaner looking than putting everything on one giant line
         for (let p of g.printers) {
+            console.log(p)
             table += "<tr><th scope=\"row\">" + p.location + "</th>"
             //As of now, toner length should be 5!
-            for (let i = 0; i < p.toner.length; i++) {
+            //It's actually not, we just onjly want to print the first 5 values
+            for (let i = 0; i < 5; i++) {
                 if (p.toner[i] === undefined) {
                     //Add warning if we couldn't pull data from a printer section
                     table += "<td class=\"table-warning\">UNKNOWN</td>"
                 } else {
                     //Make the cell red if it's <=10%
-                    if (p.toner[i] <= 10) {
+                    if (p.toner[i] <= 20) {
                         table += "<td class=\"table-danger\">"
                     } else {
                         table += "<td>"
                     }
-                    table += p.toner[i] + "</td>"
+                    table += p.toner[i] + "%</td>"
 
                 }
             }
@@ -50,7 +52,6 @@ function generateTable(g) {
     table += "</tbody></table>"
     //Write the file to the /public/tables directory
     fs.writeFile("./public/tables/" + g.groupName + ".html", table, (err) => {
-        console.log(g)
         if (err)
             throw err
         console.log('Created file!')
