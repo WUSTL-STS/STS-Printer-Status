@@ -17,6 +17,7 @@ async function updateValues() {
         printers[i].set("paper", paper)
         await printers[i].save()
     }
+    console.log("---Completed---")
 }
 
 function fetchToner() {

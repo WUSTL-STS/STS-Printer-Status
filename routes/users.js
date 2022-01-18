@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
             users
         })
     } catch (err) {
-        console.log(err)
+        console.error(err)
         return res.render('error/505')
     }
 })
@@ -39,7 +39,7 @@ router.post('/add', async (req, res) => {
             res.redirect('/users/')
         }
     } catch (err) {
-        console.log(err)
+        console.error(err)
         return res.render('error/505')
     }
 })
@@ -66,7 +66,7 @@ router.delete('/:id', async (req, res) => {
         }
 
     } catch (err) {
-        console.log(err)
+        console.error(err)
         return res.render('error/505')
     }
 })
