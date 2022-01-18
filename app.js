@@ -11,6 +11,7 @@ const cron = require('node-cron')
 const connectDB = require('./config/db')
 const updateValues = require('./scripts/update')
 const generateTable = require('./scripts/genTable')
+const sendEmail = require('./scripts/sendEmail')
 
 //Load /config/env
 dotenv.config({
@@ -90,4 +91,8 @@ cron.schedule('* * * * *', async () => {
     await updateValues()
     console.log("Generating table...")
     await generateTable()
+})
+
+cron.schedule('0 */4 * * *', async() => {
+    sendEmail().catch(console.error)
 })

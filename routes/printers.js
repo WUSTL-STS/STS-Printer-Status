@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
         res.redirect('/')
     }
     catch (err) {
-        console.log(err)
+        console.error(err)
         res.redirect('error/505')
     }
 })
@@ -28,7 +28,7 @@ router.get('/add', async (req, res) => {
             users
         })
     } catch (err) {
-        console.log(err)
+        console.error(err)
         return res.render('error/505')
     }
 })
@@ -70,7 +70,7 @@ router.post('/add', async (req, res) => {
         }
         res.redirect('/')
     } catch (err) {
-        console.log(err)
+        console.error(err)
         return res.render('error/505')
     }
 })
@@ -86,7 +86,7 @@ router.delete('/:id', async (req, res) => {
         }
         res.redirect('/')
     } catch (err) {
-        console.log(err)
+        console.error(err)
         return res.render('error/505')
     }
 })
@@ -98,9 +98,10 @@ router.put('/:id/email', async (req, res) => {
         let updateP = await Printer.findById(req.params.id)
         updateP.email = !updateP.email
         await updateP.save()
+        console.log(updateP.location + " has email set to " + updateP.email)
         res.redirect('/')
     } catch (err) {
-        console.log(err)
+        console.error(err)
         return res.render('error/505')
     }
 })

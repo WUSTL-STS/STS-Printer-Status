@@ -20,7 +20,7 @@ const PrinterSchema = new mongoose.Schema({
     },
     email: {
         type: Boolean,
-        default: 'false'
+        default: 'true'
     },
     // id: {
     //     type: Number,
