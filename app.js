@@ -9,7 +9,7 @@ const session = require('express-session')
 const cron = require('node-cron')
 
 const connectDB = require('./config/db')
-const updateValues = require('./scripts/update')
+const updateValues = require('./scripts/updatePrinters')
 const generateTable = require('./scripts/genTable')
 const sendEmail = require('./scripts/sendEmail')
 
@@ -85,14 +85,16 @@ app.listen(port, () => {
     console.log(`Server hosted on port ${port}`);
 });
 
+//Update database values and create new tables every 3 minutes
 console.log("scheduling scripts...")
-cron.schedule('* * * * *', async () => {
+cron.schedule('*/3 * * * *', async () => {
     console.log("Updating printer values...")
     await updateValues()
     console.log("Generating table...")
     await generateTable()
-})
+}, {})
 
+//Send emails every 4 hours
 cron.schedule('0 */4 * * *', async() => {
     sendEmail().catch(console.error)
-})
+}, {})

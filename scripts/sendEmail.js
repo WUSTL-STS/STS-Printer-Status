@@ -1,9 +1,12 @@
 const nodemailer = require('nodemailer')
 const Printer = require('../models/Printer')
 
+//Function called by other scripts on a cron job
 async function send(){
+    //Look for errors within all the printers
     let errors = await queryPrinters();
     console.log(errors)
+    //Create the nodemailer item that sends the emails
     let transport = nodemailer.createTransport({
         host: "outlook.office365.com",
         port: 587,
@@ -57,6 +60,7 @@ Example:
  */
 async function queryPrinters(){
     let printers = await Printer.find().populate('contact').lean()
+    //Reference arrays. There should probably be a better way to edit these.
     const tonerRef = ['Black', 'Cyan', 'Magenta', 'Yellow', 'Fuser', 'Status', 'feeder?', 'img?']
     const paperRef = ['Tray 2', 'Tray 2', 'Tray 2', 'Tray 2']
     let errors = [];
@@ -68,19 +72,21 @@ async function queryPrinters(){
         }
         //For each printer, iterate over its stored toner values
         for(let tonerCount = 0; tonerCount < printers[i].toner.length; tonerCount++){
-            //If a printer has a toner value below 15 and the value is not -3 (given by the
+            //If a printer has a toner value below 15 and the value is not -3 (given by the fuser (i think?))
             if(printers[i].toner[tonerCount] <= 15 && printers[i].toner[tonerCount] != '-3'){
+                //Create the JSON objects in case they don't already exist
                 if(!errors[printers[i].location]){
                     errors[printers[i].location] = {}
                     errors[printers[i].location].toner = []
                     errors[printers[i].location]['contact'] = printers[i].contact
                 }
+                //Write the data to the JSON object
                 errors[printers[i].location].toner[tonerRef[tonerCount]] = printers[i].toner[tonerCount]
             }
         }
-        console.log("Checking paper for " + printers[i].location)
+        //For each printer, iterate over its paper values
         for(let paperCount = 0; paperCount < printers[i].paper.length; paperCount++){
-
+            //Write the value to the JSON object if the value is false.
             if(!printers[i].paper[paperCount]){
                 if(!errors[printers[i].location]){
                     errors[printers[i].location] = {}
