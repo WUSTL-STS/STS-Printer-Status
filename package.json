@@ -14,6 +14,7 @@
   "author": "Jack Heuberger",
   "license": "ISC",
   "dependencies": {
+    "@popperjs/core": "^2.9.2",
     "bootstrap": "^5.0.2",
     "bootstrap-icons": "^1.5.0",
     "cookie-parser": "^1.4.5",
@@ -26,13 +27,18 @@
     "hbs": "^4.1.2",
     "jquery": "^3.6.0",
     "method-override": "^3.0.0",
-    "mongoose": "^5.13.3",
+    "mongoose": "^6.1.7",
     "node-cron": "^3.0.0",
     "nodemailer": "^6.7.2",
     "snmp-native": "^1.2.0"
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
+    "eslint": "^7.32.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.2.0",
     "nodemon": "^2.0.7"
   }
 }
