@@ -97,8 +97,8 @@ cron.schedule('*/3 * * * *', async () => {
   await generateTable()
 }, {})
 
-// Send emails every 4 hours
+// Send emails every 3 hours
 console.log('scheduling emails...')
-cron.schedule('0 */4 * * *', async () => {
+cron.schedule('0 */3 * * *', async () => {
   sendEmail().catch(console.error)
 }, {})

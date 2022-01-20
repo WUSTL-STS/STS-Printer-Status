@@ -4,7 +4,7 @@ const Printer = require('../models/Printer')
 // Function called by other scripts on a cron job
 async function send () {
   // Look for errors within all the printers
-  console.log("Email started. Querying printers")
+  console.log('Email started. Querying printers')
   const errors = await queryPrinters()
   // Create the nodemailer item that sends the emails
   const transport = nodemailer.createTransport({
@@ -16,6 +16,7 @@ async function send () {
       pass: process.env.PWD
     }
   })
+  // Iterate over the error json array and construct the string of html
   for (const p in errors) {
     let html = '<h1>STS Printer Status Report</h1><p>' + errors[p].contact.firstname + ', the following problems ' +
             'have been detected with the ' + p + ' printer:</p><ul>'
@@ -36,7 +37,7 @@ async function send () {
     const msg = await transport.sendMail({
       from: 'student.technology@wustl.edu',
       to: errors[p].contact.email,
-      subject: 'STS Printer Status Alert',
+      subject: '[TEST] STS Printer Status Alert',
       html: html
     })
     console.log('Message sent: %s', msg.messageId)
