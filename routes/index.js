@@ -7,6 +7,7 @@ const Group = require('../models/Group')
 
 const updateValues = require('../scripts/updatePrinters')
 const generateTable = require('../scripts/genTable')
+const sendEmail = require('../scripts/sendEmail')
 
 // Desc: Main index page, lists printers and management options. Lets users create new groups.
 // Route: GET /
@@ -40,6 +41,11 @@ router.get('/fetch', async function (req, res) {
 
 router.get('/table', async function (req, res) {
   await generateTable()
+  res.redirect('/')
+})
+
+router.get('/email', async function (req, res){
+  await sendEmail()
   res.redirect('/')
 })
 

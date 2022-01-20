@@ -19,7 +19,7 @@ async function updateValues () {
     printers[i].set('paper', paper)
     await printers[i].save()
   }
-  console.log('---Completed---')
+  console.log('---Finished Updating Values---')
 }
 
 // Returns an array of length 8 representing all of the toner values. See /models/Printer

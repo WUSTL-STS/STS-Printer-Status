@@ -22,7 +22,6 @@ router.get('/', async (req, res) => {
 // Route: POST /users/add
 router.post('/add', async (req, res) => {
   try {
-    console.log(req.body)
     if (req.body.firstname == '' || req.body.firstname == null || req.body.lastname == '' || req.body.lastname == null) {
       req.session.message = {
         type: 'danger',
@@ -48,7 +47,9 @@ router.post('/add', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   try {
     const userPrinters = await Printer.find({ contact: req.params.id })
-    if (userPrinters) {
+    console.log('trying to delete user with id ' + req.params.id)
+    if (userPrinters && userPrinters.length) {
+      console.error('cannot delete, user is associated with printers')
       req.session.message = {
         type: 'danger',
         title: 'This user is still associated with some printers!',
@@ -56,11 +57,13 @@ router.delete('/:id', async (req, res) => {
       }
       res.redirect('/users')
     } else {
+      console.log('attempting deletion...')
       await User.deleteOne({ _id: req.params.id })
       req.session.message = {
         type: 'primary',
         message: 'Success!'
       }
+      console.log('deletion successful')
       res.redirect('/users')
     }
   } catch (err) {

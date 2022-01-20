@@ -4,8 +4,8 @@ const Printer = require('../models/Printer')
 // Function called by other scripts on a cron job
 async function send () {
   // Look for errors within all the printers
+  console.log("Email started. Querying printers")
   const errors = await queryPrinters()
-  console.log(errors)
   // Create the nodemailer item that sends the emails
   const transport = nodemailer.createTransport({
     host: 'outlook.office365.com',
@@ -31,15 +31,17 @@ async function send () {
         }
       }
     }
+    console.log(`Sending To ${errors[p].contact.email}`)
     html += '</ul><p>Please fix these issues when possible.</p>'
     const msg = await transport.sendMail({
       from: 'student.technology@wustl.edu',
-      to: 'jackheuberger@wustl.edu',
+      to: errors[p].contact.email,
       subject: 'STS Printer Status Alert',
       html: html
     })
     console.log('Message sent: %s', msg.messageId)
   }
+  console.log('---emails finished---')
 }
 
 /*
@@ -62,11 +64,9 @@ async function queryPrinters () {
   const printers = await Printer.find().populate('contact').lean()
   // Reference arrays. There should probably be a better way to edit these.
   const tonerRef = ['Black', 'Cyan', 'Magenta', 'Yellow', 'Fuser', 'Status', 'feeder?', 'img?']
-  const paperRef = ['Tray 2', 'Tray 2', 'Tray 2', 'Tray 2']
   const errors = []
   // Iterate over all the printers
   for (let i = 0; i < printers.length; i++) {
-    console.log(printers[i].email)
     if (printers[i].email === false) {
       continue
     }
