@@ -2,8 +2,6 @@
     <h1>STS Printer Status Admin Panel</h1>
     <a class="btn btn-secondary" href="/users/" role="button">Edit Users</a>
     <a class="btn btn-secondary" href="/printers/add" role="button">Add a Printer</a>
-    <a class="btn btn-secondary" href="/fetch" role="button">Fetch</a>
-    <a class="btn btn-secondary" href="/table" role="button">Generate Table</a>
     {{#if groups}}
     <h3>Groups:</h3>
     {{#each groups}}
@@ -71,4 +69,8 @@
             <input type="submit" value="Post" class="btn btn-primary">
         </div>
     </form>
+    <h5>Script Buttons</h5>
+    <a class="btn btn-secondary" href="/fetch" role="button">Update Database</a>
+    <a class="btn btn-secondary" href="/table" role="button">Generate Table</a>
+    <a class="btn btn-secondary" href="/email" role="button">Send Emails</a>
 </div>
