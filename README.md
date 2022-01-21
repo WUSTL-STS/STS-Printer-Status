@@ -1,5 +1,12 @@
 # Updated Printer Status Report
 
+## Todo:
+- add way to change update/email interval (or at least well-document it)
+- store email records, send report weekly
+- status OID
+- Printer edit page
+- Password protect site
+
 ## Overview
 
 This is the updated STS printer status report. Documentation can be seen on the corresponding Confluence page.
@@ -46,4 +53,3 @@ snmpwalk -c public [IP_address] [OID]
 # TODO
 
 - Edit printer values without fully deleting the printer
-- Write scripts
