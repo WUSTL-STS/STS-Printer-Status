@@ -83,6 +83,7 @@ app.use('/', require('./routes/index'))
 app.use('/groups', require('./routes/groups'))
 app.use('/printers', require('./routes/printers'))
 app.use('/users', require('./routes/users'))
+app.use('/static', require('./routes/static'))
 
 // Expose port
 const port = process.env.PORT || 8080
