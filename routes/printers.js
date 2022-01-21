@@ -7,8 +7,7 @@ const Group = require('../models/Group')
 
 router.get('/', async (req, res) => {
   try {
-    const printers = await Printer.find({}).lean()
-    console.log(printers)
+    //const printers = await Printer.find({}).lean()
     res.redirect('/')
   } catch (err) {
     console.error(err)
@@ -44,7 +43,7 @@ router.post('/add', async (req, res) => {
     const nameQuery = {}
     nameQuery.firstname = firstname
     nameQuery.lastname = lastname
-    console.log(nameQuery)
+    console.log('creating new printer with user object ' + nameQuery)
     const contactUser = await User.findOne(nameQuery)
 
     // Create new printer object with correct parameters
@@ -78,11 +77,13 @@ router.post('/add', async (req, res) => {
 // Route: DELETE /printers/:id
 router.delete('/:id', async (req, res) => {
   try {
+    console.log('Deleting printer with id ' + req.params.id)
     await Printer.deleteOne({ _id: req.params.id })
     req.session.message = {
       type: 'success',
       message: 'Success!'
     }
+    console.log('success!')
     res.redirect('/')
   } catch (err) {
     console.error(err)

@@ -55,7 +55,7 @@ async function generateTable () {
     // Write the file to the /public/tables directory
     fs.writeFile('./public/tables/' + g.groupName + '.html', table, (err) => {
       if (err) { throw err }
-      console.log('Created file!')
+      console.log('---Finished Generating File---')
     })
   }
 }

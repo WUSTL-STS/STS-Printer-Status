@@ -91,13 +91,14 @@ app.listen(port, () => {
 })
 
 // Update database values and create new tables every 3 minutes
-console.log('scheduling scripts...')
+console.log('scheduling update and generation...')
 cron.schedule('*/3 * * * *', async () => {
   await updateValues()
   await generateTable()
 }, {})
 
-// Send emails every 4 hours
-cron.schedule('0 */4 * * *', async () => {
+// Send emails every 3 hours
+console.log('scheduling emails...')
+cron.schedule('0 */3 * * *', async () => {
   sendEmail().catch(console.error)
 }, {})
