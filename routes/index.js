@@ -13,6 +13,9 @@ const generateReport = require('../scripts/generateReport')
 // Desc: Main index page, lists printers and management options. Lets users create new groups.
 // Route: GET /
 router.get('/', async (req, res) => {
+    if (!req.session.loggedIn) {
+        res.redirect('login')
+    }
     try {
         const groups = await Group.find({}).populate({ path: 'printers', populate: { path: 'contact' } }).lean()
         // for (g of groups) {
@@ -36,21 +39,37 @@ router.get('/flash', function (req, res) {
 })
 
 router.get('/fetch', async function (req, res) {
+    if (!req.session.loggedIn) {
+        res.redirect('login')
+        return
+    }
     updateValues()
     res.redirect('/')
 })
 
 router.get('/table', async function (req, res) {
+    if (!req.session.loggedIn) {
+        res.redirect('login')
+        return
+    }
     await generateTable()
     res.redirect('/')
 })
 
 router.get('/email', async function (req, res) {
+    if (!req.session.loggedIn) {
+        res.redirect('login')
+        return
+    }
     await sendEmail()
     res.redirect('/')
 })
 
 router.get('/report', async function (req, res) {
+    if (!req.session.loggedIn) {
+        res.redirect('login')
+        return
+    }
     await generateReport()
     res.redirect('/')
 })

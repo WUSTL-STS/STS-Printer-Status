@@ -1,4 +1,7 @@
 const express = require('express')
+
+const config = require('../config/config')
+
 const router = express.Router()
 
 router.get('/', (req, res) => {
@@ -6,9 +9,11 @@ router.get('/', (req, res) => {
 })
 
 router.post('/', (req, res) => {
-    if (req.password === process.env.PWD) {
-        res.session.login = true
+    if (req.body.password === config.sitePass) {
+        req.session.loggedIn = true
         res.redirect('/')
+    } else {
+        res.render('login')
     }
 })
 
