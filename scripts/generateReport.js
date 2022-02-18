@@ -1,5 +1,6 @@
 const nodemailer = require('nodemailer')
 const config = require('../config/config')
+const fs = require('fs')
 
 async function generateReport () {
     const transport = await nodemailer.createTransport({
@@ -13,12 +14,12 @@ async function generateReport () {
     })
     const msg = await transport.sendMail({
         from: 'student.technology@wustl.edu',
-        to: 'jackheuberger@wustl.edu',
+        to: config.report_target,
         subject: 'STS Weekly Printer Status Report',
         attachments: [
             {
                 filename: 'report.csv',
-                content: '../log/emails_weekly.csv'
+                content: fs.createReadStream('./log/emails_weekly.csv')
             }
         ],
         text: 'Attached is the weekly status report for STS-managed printers'
