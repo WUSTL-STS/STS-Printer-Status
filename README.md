@@ -1,11 +1,5 @@
 # Updated Printer Status Report
 
-## Todo:
-- [ ] add way to change update/email interval (or at least well-document it)
-- [x] store email records, send report weekly
-- [ ] status OID
-- [ ] Printer edit page
-- [ ] Password protect site
 
 ## Overview
 
@@ -49,7 +43,3 @@ You technically don't need docker to run the app. Install a local instance of mo
 To run the command to pull the data from the computer the following command should be followed
 
 snmpwalk -c public [IP_address] [OID]
-
-# TODO
-
-- Edit printer values without fully deleting the printer
