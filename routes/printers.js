@@ -18,6 +18,10 @@ router.get('/', async (req, res) => {
 // Desc: Loads the page where new printers can be created
 // Route: GET /printers/add
 router.get('/add', async (req, res) => {
+    if (!req.session.loggedIn) {
+        res.redirect('login')
+        return
+    }
     try {
         const groups = await Group.find({}).lean()
         const users = await User.find({}).lean()

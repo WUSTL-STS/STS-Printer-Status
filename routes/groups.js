@@ -6,6 +6,10 @@ const Group = require('../models/Group')
 // Desc: Return information about a specific group at its mongo-assigned ID
 // Route: GET /groups/id
 router.get('/:id', async (req, res) => {
+    if (!req.session.loggedIn) {
+        res.redirect('login')
+        return
+    }
     try {
         const group = await Group.findById(req.params.id).lean()
         if (!group) {
