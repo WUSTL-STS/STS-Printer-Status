@@ -1,9 +1,10 @@
 const mongoose = require('mongoose')
+const config = require('../config/config')
 
 const connectDB = async () => {
   try {
     const conn = await mongoose.connect(
-      (process.env.DEPLOY === 'docker') ? process.env.D_URI : process.env.L_URI, {
+      (process.env.DEPLOY === 'docker') ? config.URI_Docker : config.URI_Local, {
         useNewUrlParser: true,
         useUnifiedTopology: true
       })

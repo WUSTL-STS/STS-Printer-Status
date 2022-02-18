@@ -1,11 +1,11 @@
 # Updated Printer Status Report
 
 ## Todo:
-- add way to change update/email interval (or at least well-document it)
-- store email records, send report weekly
-- status OID
-- Printer edit page
-- Password protect site
+- [ ] add way to change update/email interval (or at least well-document it)
+- [x] store email records, send report weekly
+- [ ] status OID
+- [ ] Printer edit page
+- [ ] Password protect site
 
 ## Overview
 
