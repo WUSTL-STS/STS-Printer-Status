@@ -9,7 +9,7 @@ async function generateReport () {
         secure: false,
         auth: {
             user: 'student.technology@go.wustl.edu',
-            pass: config.pwd
+            pass: process.env.EMAIL_PASS
         }
     })
     const msg = await transport.sendMail({
