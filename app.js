@@ -85,7 +85,7 @@ app.use('/', require('./routes/index'))
 app.use('/groups', require('./routes/groups'))
 app.use('/printers', require('./routes/printers'))
 app.use('/users', require('./routes/users'))
-app.use('/static', require('./routes/static'))
+app.use('/static', express.static('public/tables'))
 app.use('/login', require('./routes/login'))
 
 // Expose port

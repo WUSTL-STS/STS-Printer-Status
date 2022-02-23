@@ -9,7 +9,7 @@ router.get('/', (req, res) => {
 })
 
 router.post('/', (req, res) => {
-    if (req.body.password === config.sitePass) {
+    if (req.body.password === process.env.SITE_PASS) {
         req.session.loggedIn = true
         res.redirect('/')
     } else {

@@ -18,7 +18,7 @@ async function send () {
         secure: false,
         auth: {
             user: 'student.technology@go.wustl.edu',
-            pass: config.pwd
+            pass: process.env.EMAIL_PASS
         }
     })
     // Iterate over the error json array and construct the string of html
