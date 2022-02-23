@@ -24,7 +24,23 @@ router.get('/add', async (req, res) => {
     }
     try {
         const groups = await Group.find({}).lean()
+        if (!groups.length) {
+            req.session.message = {
+                type: 'warning',
+                title: 'No groups exist!',
+                message: 'Please create a printer group before adding a printer.'
+            }
+            res.redirect('/')
+        }
         const users = await User.find({}).lean()
+        if (!users.length) {
+            req.session.message = {
+                type: 'warning',
+                title: 'No user exist!',
+                message: 'Please create users before adding a printer.'
+            }
+            res.redirect('/')
+        }
         res.render('printer', {
             groups,
             users
