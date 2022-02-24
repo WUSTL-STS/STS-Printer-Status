@@ -96,6 +96,10 @@ router.post('/add', async (req, res) => {
 // Desc: Delete a printer
 // Route: DELETE /printers/:id
 router.delete('/:id', async (req, res) => {
+    if (!req.session.loggedIn) {
+        res.redirect('login')
+        return
+    }
     try {
         console.log('Deleting printer with id ' + req.params.id)
         const g = await Group.findOne({ printers: req.params.id })
@@ -112,6 +116,62 @@ router.delete('/:id', async (req, res) => {
     } catch (err) {
         console.error(err)
         return res.render('error/505')
+    }
+})
+
+router.get('/:id/', async (req, res) => {
+    if (!req.session.loggedIn) {
+        res.redirect('/login')
+        return
+    }
+    try {
+        const p = await Printer.findById(req.params.id).populate('contact').lean()
+        const groups = await Group.find().lean()
+        const users = await User.find().lean()
+        p.group = await Group.findOne({ printers: req.params.id }).lean()
+        console.log(p)
+
+        res.render('printer', { p, groups, users })
+    } catch (err) {
+        console.error(err)
+    }
+})
+
+router.put('/:id/', async (req, res) => {
+    try {
+        const nameQuery = {}
+        nameQuery.firstname = req.body.user.split(' ').slice(0, -1).join(' ')
+        nameQuery.lastname = req.body.user.split(' ').slice(-1).join(' ')
+        const contactUser = await User.findOne(nameQuery)
+
+        let select = Printer.findById(req.params.id).lean()
+        const p = {}
+        p.email = select.email
+        p.toner = select.toner
+        p.paper = select.paper
+        p.location = req.body.location
+        p.url = req.body.url
+        p.model = req.body.model
+        p.contact = contactUser
+
+        select = await Printer.findByIdAndUpdate(req.params.id, p)
+        await select.save()
+
+        // Remove the printer from the old group (assuming it changed)
+        const oldGroup = await Group.findOne({ printers: req.params.id })
+        oldGroup.printers.pull(req.params.id)
+        await oldGroup.save()
+
+        // Update the group to contain the printer
+        const groupQuery = {}
+        groupQuery.groupName = req.body.group
+        const newGroup = await Group.findOne(groupQuery)
+        newGroup.printers.push(select)
+        await newGroup.save()
+
+        res.redirect('/')
+    } catch (err) {
+        console.error(err)
     }
 })
 

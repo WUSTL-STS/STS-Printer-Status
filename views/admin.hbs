@@ -1,19 +1,18 @@
 <div class="container">
     <h1>STS Printer Status Admin Panel</h1>
-    <a class="btn btn-secondary" href="/users/" role="button">Edit Users</a>
-    <a class="btn btn-secondary" href="/printers/add" role="button">Add a Printer</a>
+    <div style="padding-bottom: 30px">
+        <a class="btn btn-secondary" href="/users/" role="button">Edit Users</a>
+        <a class="btn btn-secondary" href="/printers/add" role="button">Add a Printer</a>
+    </div>
     {{#if groups}}
-    <h3>Groups:</h3>
+        <div class="printerTables" style="padding-bottom: 30px">
     {{#each groups}}
-    <form action="/groups/{{_id}}" method="post">
-        <input type="hidden" name="_method" value="delete">
-        <div class="d-flex justify-content-left">
-            <button type="submit" class="btn btn-danger" style="margin-right: 10px"><i
-                    class="bi bi-trash-fill"></i></button>
-            <h4><strong>{{groupName}}:</strong></h4>
-        </div>
 
-    </form>
+        <h4>
+            {{#if printers}} <strong><a href="{{getPath groupName}}">{{groupName}}</a>:</strong>
+            {{else}} <strong>{{groupName}}</strong>
+            {{/if}}
+        </h4>
     {{#if printers}}
     <table class="table" style="table-layout:fixed;">
         <thead>
@@ -23,6 +22,7 @@
                 <th scope="col">Model</th>
                 <th scope="col">Contact</th>
                 <th scope="col">Email Switch</th>
+                <th scope="col">Edit</th>
                 <th scope="col">Delete</th>
 
             </tr>
@@ -43,6 +43,11 @@
                     </form>
                 </td>
                 <td scope="col">
+                    <form action="/printers/{{_id}}" method="get">
+                        <button type="submit" class="btn btn-warning"><i class="bi bi-pencil-fill"></i></button>
+                    </form>
+                </td>
+                <td scope="col">
                     <form action="/printers/{{_id}}" method="post">
                         <input type="hidden" name="_method" value="delete">
                         <button type="submit" class="btn btn-danger"><i class="bi bi-trash-fill"></i></button>
@@ -55,8 +60,16 @@
     </table>
     {{else}}
     <p>There are no printers in this group!</p>
+        <form action="/groups/{{_id}}" method="post">
+        <input type="hidden" name="_method" value="delete">
+        <div class="d-flex justify-content-left" style="padding-bottom: 10px">
+            <button type="submit" class="btn btn-danger" style="margin-right: 10px">Delete group <strong>{{groupName}}</strong></button>
+        </div>
+
+        </form>
     {{/if}}
     {{/each}}
+        </div>
     {{else}}
     <h3>You haven't created any groups!</h3>
     {{/if}}
@@ -69,7 +82,7 @@
             <input type="submit" value="Post" class="btn btn-primary">
         </div>
     </form>
-    <h5>Script Buttons</h5>
+    <h5 style="padding-top: 50px">Script Buttons</h5>
     <a class="btn btn-secondary" href="/fetch" role="button">Update Database</a>
     <a class="btn btn-secondary" href="/table" role="button">Generate Table</a>
     <a class="btn btn-secondary" href="/email" role="button">Send Emails</a>

@@ -76,7 +76,14 @@ app.use('/icons', express.static(__dirname + '/node_modules/bootstrap-icons'))
 // Enable handlebars
 app.engine('.hbs', exphbs({
     defaultLayout: 'main',
-    extname: '.hbs'
+    extname: '.hbs',
+    helpers: {
+        getPath (name) {
+            if (name) {
+                return '/static/' + name.replace(/ /g, '') + '.html'
+            }
+        }
+    }
 }))
 app.set('view engine', '.hbs')
 

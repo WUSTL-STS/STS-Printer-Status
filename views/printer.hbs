@@ -1,43 +1,88 @@
 <div class="container">
-    <h2>Add a printer</h2>
-    <form action="/printers/add" method="post">
-        <div class="row">
-            <div class="col">
-                <label for="Location">Printer Location</label>
-                <input type="text" class="form-control" id="Location" placeholder="Printer Location" name="location">
+    {{#if p}}
+        <h2>Editing the {{p.location}} Printer</h2>
+        <form action="/printers/{{p._id}}" method="post">
+            <input type="hidden" name="_method" value="put">
+            <div class="row">
+                <div class="col">
+                    <label for="Location">Printer Location</label>
+                    <input type="text" class="form-control" id="Location" placeholder="Printer Location" name="location" value="{{p.location}}">
+                </div>
+                <div class="col">
+                    <label for="url">Printer IP address</label>
+                    <input class="form-control" id="url" placeholder="Printer IP" name="url" value="{{p.url}}">
+                </div>
             </div>
-            <div class="col">
-                <label for="url">Printer IP address</label>
-                <input class="form-control" id="url" placeholder="Printer IP" name="url">
+            <div class="row">
+                <div class="col">
+                    <label for="modelSelect">Select a compatible model:</label>
+                    <select name="model" id="modelSelect" name="model" value="{{p.model}}">
+                        <option value="M577">M577</option>
+                        <option value="M578">M578</option>
+                    </select>
+                </div>
+                <div class="col">
+                    <label for="userSelect">Select a user:</label>
+                    <select list="users" name="user" id="userSelect" value="{{p.contact.firstname}} {{p.contact.lastname}}">
+                        {{#each users}}
+                            <option value="{{firstname}} {{lastname}}">{{firstname}} {{lastname}}</option>
+                        {{/each}}
+                    </select>
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <label for="modelSelect">Select a compatible model:</label>
-                <select name="model" id="modelSelect" name="model">
-                    <option value="M577">M577</option>
-                    <option value="M578">M578</option>
-                </select>
+            <div class="row">
+                <div class="col">
+                    <label for="groupSelect">Group:</label>
+                    <select name="group" id="groupSelect" name="group" value="{{p.group.groupName}}">
+                        {{#each groups}}
+                            <option value="{{groupName}}">{{groupName}}</option>
+                        {{/each}}
+                    </select>
+                </div>
             </div>
-            <div class="col">
-                <label for="userSelect">Select a user:</label>
-                <select list="users" name="user" id="userSelect">
-                    {{#each users}}
-                    <option value="{{firstname}} {{lastname}}">{{firstname}} {{lastname}}</option>
-                    {{/each}}
-                </select>
+            <input type="submit" value="Post" class="btn btn-primary">
+        </form>
+    {{else}}
+        <h2>Add a printer</h2>
+        <form action="/printers/add" method="post">
+            <div class="row">
+                <div class="col">
+                    <label for="Location">Printer Location</label>
+                    <input type="text" class="form-control" id="Location" placeholder="Printer Location" name="location">
+                </div>
+                <div class="col">
+                    <label for="url">Printer IP address</label>
+                    <input class="form-control" id="url" placeholder="Printer IP" name="url">
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <label for="groupSelect">Group:</label>
-                <select name="group" id="groupSelect" name="group">
-                    {{#each groups}}
-                    <option value="{{groupName}}">{{groupName}}</option>
-                    {{/each}}
-                </select>
+            <div class="row">
+                <div class="col">
+                    <label for="modelSelect">Select a compatible model:</label>
+                    <select name="model" id="modelSelect" name="model">
+                        <option value="M577">M577</option>
+                        <option value="M578">M578</option>
+                    </select>
+                </div>
+                <div class="col">
+                    <label for="userSelect">Select a user:</label>
+                    <select list="users" name="user" id="userSelect">
+                        {{#each users}}
+                            <option value="{{firstname}} {{lastname}}">{{firstname}} {{lastname}}</option>
+                        {{/each}}
+                    </select>
+                </div>
             </div>
-        </div>
-        <input type="submit" value="Post" class="btn btn-primary">
-    </form>
+            <div class="row">
+                <div class="col">
+                    <label for="groupSelect">Group:</label>
+                    <select name="group" id="groupSelect" name="group">
+                        {{#each groups}}
+                            <option value="{{groupName}}">{{groupName}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+            </div>
+            <input type="submit" value="Post" class="btn btn-primary">
+        </form>
+    {{/if}}
 </div>
