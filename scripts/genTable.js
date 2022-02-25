@@ -1,4 +1,5 @@
 const fs = require('fs')
+const config = require('../config/config')
 
 const Group = require('../models/Group')
 
@@ -23,8 +24,8 @@ async function generateTable () {
                         // Add warning if we couldn't pull data from a printer section
                         table += '<td class="table-warning">UNKNOWN</td>'
                     } else {
-                        // Make the cell red if it's <=10%
-                        if (p.toner[i] <= 20) {
+                        // Make the cell red if it's <= a % set config.js
+                        if (p.toner[i] <= config.table_red_threshold) {
                             table += '<td class="table-danger">'
                         } else {
                             table += '<td>'
