@@ -7,13 +7,16 @@ There are two files within the /config folder: config.js and .env.
 - `EMAIL_PASS` (in .env) = The student.technology@wustl.edu email.
   - THIS NEEDS TO BE CHANGED WITH EACH WUSTL KEY PASSWORD UPDATE.
 - `SITE_PASS` (in .env) = The password for the website.
+- `REPORT_TARGET` = The email to send weekly reports to
 
 
 `config.js` stores all other options:
 
 - `email_hours` = How frequently the email script should activate. Note that this value does not carry through 24 hour intervals.
   - For example: setting this to 5 will cause emails at midnight, 5am, 10am, 3pm, 8pm, and this cycle will reset -- it will not go to 1am.
-- `port` = the port the web server should run on
-- `URI_DOCKER` = The database address if being run with the status report in a docker network
+- `port` = the port the web server should run on (80)
+- `URI_Docker` = The database address if being run with the status report in a docker network
 - `URI_Local` = The database address if being run separate from the app (in a separate container or fully locally)
-- `report_target` = The email to send the weekly reports to (oana)
+- `toner_email_percentage` = The threshold for a toner cartridge to be marked low
+- `table_red_threshold` = The threshold for a toner cell to be marked as red on the report
+- `global_email` = Universal email switch. If false, no emails will be sent by the app.
