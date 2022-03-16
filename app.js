@@ -96,7 +96,7 @@ app.use('/static', express.static('public/tables'))
 app.use('/login', require('./routes/login'))
 
 // Expose port
-const port = process.env.PORT || 8080
+const port = config.port
 app.listen(port, () => {
     console.log(`Server hosted on port ${port}`)
 })

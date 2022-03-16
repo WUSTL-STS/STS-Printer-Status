@@ -8,6 +8,9 @@ const appendLog = util.promisify(fs.appendFile)
 
 // Function called by other scripts on a cron job
 async function send () {
+    if (!config.global_email) {
+        return
+    }
     // Look for errors within all the printers
     console.log('Email started. Querying printers')
     const errors = await queryPrinters()
