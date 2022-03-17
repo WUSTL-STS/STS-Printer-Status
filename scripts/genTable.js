@@ -3,9 +3,9 @@ const config = require('../config/config')
 
 const Group = require('../models/Group')
 
-async function generateTable () {
+async function generateTable() {
     console.log('Generating table...')
-    const groups = await Group.find({}).populate({ path: 'printers', populate: { path: 'contact' } })
+    const groups = await Group.find({}).populate({ path: 'printers', populate: { path: 'contact' } }).sort({ 'printers.location': -1 })
     for (let i = 0; i < groups.length; i++) {
         const g = groups[i]
         // Add bootstrap, set up the table head
@@ -17,12 +17,25 @@ async function generateTable () {
             // I decided to use for loops because it was significantly cleaner looking than putting everything on one giant line
             for (const p of g.printers) {
                 table += '<tr><th scope="row">' + p.location + '</th>'
-                // As of now, toner length should be 5!
+
+                // As of now, toner length should be 5 for COLOR PRINTERS!
                 // It's actually not, we just only want to print the first 5 values
                 for (let i = 0; i < 5; i++) {
-                    if (p.toner[i] === undefined) {
+                    // Handle BW printers. index 0 is toner, index 1 is maintenance kit
+                    if (p.model == 'M605' || p.model == 'M608') {
+                        // Make the cell red if it's <= a % set config.js
+                        if (p.toner[0] <= config.table_red_threshold) {
+                            table += '<td class="table-danger">'
+                        } else {
+                            table += '<td>'
+                        }
+                        table += p.toner[i] + '%</td><td class="table-warning">N/A</td><td class="table-warning">N/A</td><td class="table-warning">N/A</td><td class="table-warning">N/A</td>'
+                        break
+                    }
+
+                    if (p.toner[i] === null) {
                         // Add warning if we couldn't pull data from a printer section
-                        table += '<td class="table-warning">UNKNOWN</td>'
+                        table += '<td class="table-warning">N/A</td>'
                     } else {
                         // Make the cell red if it's <= a % set config.js
                         if (p.toner[i] <= config.table_red_threshold) {
@@ -35,8 +48,8 @@ async function generateTable () {
                 }
                 // Paper length should be 4
                 for (let i = 0; i < p.paper.length; i++) {
-                    if (p.paper[i] === undefined) {
-                        table += '<td class="table-warning">UNKNOWN</td>'
+                    if (p.paper[i] === null) {
+                        table += '<td class="table-warning">N/A</td>'
                     } else {
                         // Make the cell red if the paper is empty
                         if (p.paper[i] == false) {
