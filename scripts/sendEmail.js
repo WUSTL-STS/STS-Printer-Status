@@ -36,12 +36,14 @@ async function send () {
             'have been detected with the ' + p + ' printer:</p><ul>'
         if (errors[p].toner) {
             for (const color in errors[p].toner) {
-                html += '<li>The ' + color + ' toner is at ' + errors[p].toner[color] + '%.</li>'
+		if(errors[p].toner[color] !== null){
+                	html += '<li>The ' + color + ' toner is at ' + errors[p].toner[color] + '%.</li>'
+		}
             }
         }
         if (errors[p].paper) {
             for (let tray = 0; tray < errors[p].paper.length; tray++) {
-                if (errors[p].paper[tray] === 'Empty') {
+                if (errors[p].paper[tray] === 'Empty' && errors[p].paper[tray] !== null) {
                     html += '<li>Tray ' + (tray + 1) + ' empty.</li>'
                 }
             }
