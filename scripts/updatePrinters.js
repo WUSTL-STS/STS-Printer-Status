@@ -10,12 +10,17 @@ async function updateValues () {
     try {
         const printers = await Printer.find() // Get a list of all the printers and iterate over them
         for (let i = 0; i < printers.length; i++) {
-            session = new snmp.Session({ host: printers[i].url }) // Create new SNMP session
-            const toner = await fetchToner()
-            const paper = await fetchPaper()
-            printers[i].set('toner', toner)
-            printers[i].set('paper', paper)
-            await printers[i].save()
+            try {
+                session = new snmp.Session({ host: printers[i].url, timeouts: [1000, 2000, 4000, 8000] }) // Create new SNMP session
+                const toner = await fetchToner()
+                const paper = await fetchPaper()
+                printers[i].set('toner', toner)
+                printers[i].set('paper', paper)
+                await printers[i].save()
+                console.log('successfully queried ' + printers[i].location)
+            } catch (err) {
+                console.error(printers[i].location + ' ' + err)
+            }
         }
         console.log('---Finished Updating Values---')
     } catch (err) {
@@ -30,7 +35,6 @@ function fetchToner () {
         session.getSubtree({ oid: [1, 3, 6, 1, 2, 1, 43, 11, 1, 1, 9, 1] }, function (error, varbinds) {
             // If error, reject the promise
             if (error) {
-                console.error(error)
                 reject(error)
             } else {
                 // Create the array and resolve the promise using the array
@@ -50,7 +54,6 @@ function fetchPaper () {
         const paper = new Array(4)
         session.getSubtree({ oid: [1, 3, 6, 1, 2, 1, 43, 8, 2, 1, 10] }, (error, varbinds) => {
             if (error) {
-                console.error(error)
                 reject(error)
             } else {
                 // 5 total tray varbinds, first is for bypass -- can be ignored
