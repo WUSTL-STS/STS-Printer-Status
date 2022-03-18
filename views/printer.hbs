@@ -87,5 +87,15 @@
         </div>
         <input type="submit" value="Post" class="btn btn-primary">
     </form>
+        <h3 style="padding-top: 50px">Import Printers:</h3>
+        <form action="/printers/import" method="POST" encType="multipart/form-data">
+            <input class="form-control" type="file" id="formFile" name="printerImport">
+            <input type="submit" value="Submit" class="btn btn-primary">
+            <p><strong>NOTE:</strong> This function will not check for duplicate printers, though it will check for valid user email addresses.
+                If an email address is not associated with a user, then no printers after the error will be added.</p>
+            <p>If model is left blank, then the printer will be entered as an M577. Possible values are 'M577', 'M578', 'M605', 'M608'</p>
+            <p>If contact_email is left blank, then it will be set to student.technology@wustl.edu. Make sure this user exists before running the script.</p>
+            <a href="/printers/import">Download Sample</a>
+        </form>
     {{/if}}
 </div>

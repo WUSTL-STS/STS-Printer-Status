@@ -1,9 +1,11 @@
 const express = require('express')
 const router = express.Router()
+const csv = require('csvtojson')
 
 const Printer = require('../models/Printer')
 const User = require('../models/User')
 const Group = require('../models/Group')
+const path = require('path')
 
 router.get('/', async (req, res) => {
     try {
@@ -85,6 +87,59 @@ router.post('/add', async (req, res) => {
         req.session.message = {
             type: 'success',
             message: 'Success!'
+        }
+        res.redirect('/')
+    } catch (err) {
+        console.error(err)
+        return res.render('error/505')
+    }
+})
+
+router.get('/import', (req, res) => {
+    res.sendFile(path.join(__dirname, '../public/samples', 'printers.csv'))
+})
+
+router.post('/import', async (req, res) => {
+    try {
+        // Make sure a file was uploaded
+        if (!req.files || Object.keys(req.files).length === 0) {
+            req.session.message = {
+                type: 'warning',
+                title: 'A file was not uploaded!',
+                message: ''
+            }
+            res.redirect('/users')
+        }
+
+        // Make sure the file is a csv and that there is 1 file
+        if (!(req.files.printerImport.name).includes('.csv') || Object.keys(req.files).length > 1) {
+            req.session.message = {
+                type: 'warning',
+                title: 'File import error!',
+                message: 'Make sure to upload a CSV and to upload only one file.'
+            }
+            res.redirect('/users')
+        }
+
+        const upload = await csv().fromString(req.files.printerImport.data.toString('utf8'))
+        for (let i = 0; i < upload.length; i++) {
+            const p = {}
+            p.location = upload[i].location
+            p.url = upload[i].url
+            if (!upload[i].contact_email) {
+                p.contact = await User.findOne({ email: 'student.technology@wustl.edu' })
+            } else {
+                p.contact = await User.findOne({ email: upload[i].contact_email })
+            }
+
+            upload[i].model ? p.model = upload[i].model : p.model = 'M577'
+
+            const printer = await Printer.create(p)
+            await printer.save()
+            const group = await Group.findOne({ name: upload[i].group })
+            await group.printers.push(printer)
+            await group.save()
+            console.log('imported ' + p.location + ' printer')
         }
         res.redirect('/')
     } catch (err) {
