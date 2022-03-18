@@ -4,11 +4,14 @@ const router = express.Router()
 const Printer = require('../models/Printer')
 const User = require('../models/User')
 
+const path = require('path')
+const csv = require('csvtojson')
+
 // Desc: The page where users are listed and can be created
 // Route: GET /users/
 router.get('/', async (req, res) => {
     if (!req.session.loggedIn) {
-        res.redirect('login')
+        res.redirect('/login')
         return
     }
     try {
@@ -40,6 +43,45 @@ router.post('/add', async (req, res) => {
             }
             res.redirect('/users/')
         }
+    } catch (err) {
+        console.error(err)
+        return res.render('error/505')
+    }
+})
+
+router.get('/import', (req, res) => {
+    res.sendFile(path.join(__dirname, '../public/samples', 'users.csv'))
+})
+
+router.post('/import', async (req, res) => {
+    try {
+        // Make sure a file was uploaded
+        if (!req.files || Object.keys(req.files).length === 0) {
+            req.session.message = {
+                type: 'warning',
+                title: 'A file was not uploaded!',
+                message: ''
+            }
+            res.redirect('/users')
+        }
+
+        // Make sure the file is a csv and that there is 1 file
+        if (!(req.files.userImport.name).includes('.csv') || Object.keys(req.files).length > 1) {
+            req.session.message = {
+                type: 'warning',
+                title: 'File import error!',
+                message: 'Make sure to upload a CSV and to upload only one file.'
+            }
+            res.redirect('/users')
+        }
+
+        const upload = await csv().fromString(req.files.userImport.data.toString('utf8'))
+        for (let i = 0; i < upload.length; i++) {
+            await User.create(upload[i])
+            console.log('imported user ' + i)
+        }
+        console.log('finished importing users')
+        res.redirect('/users')
     } catch (err) {
         console.error(err)
         return res.render('error/505')

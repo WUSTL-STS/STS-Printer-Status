@@ -5,6 +5,10 @@ const config = require('../config/config')
 const router = express.Router()
 
 router.get('/', (req, res) => {
+    if (process.env.DEPLOY !== 'docker') {
+        req.session.loggedIn = true
+        res.redirect('/')
+    }
     res.render('login')
 })
 

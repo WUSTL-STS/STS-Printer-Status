@@ -1,23 +1,41 @@
 <div class="container">
     <a class="btn btn-secondary" href="/" role="button">Home Page</a>
 
-    <h3>Add a new user:</h3>
-    <form action="/users/add" method="POST">
-        <div class="form-row">
-            <div class="col">
-                <input type="text" class="form-control" placeholder="First name" id="firstname" name="firstname">
-            </div>
-            <div class="col">
-                <input type="text" class="form-control" placeholder="Last name" id="lastname" name="lastname">
-            </div>
+    <div class="row justify-content-center">
+        <div class="col">
+            <h3>Add a new user:</h3>
+            <form action="/users/add" method="POST">
+                <div class="form-row">
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="First name" id="firstname" name="firstname">
+                    </div>
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="Last name" id="lastname" name="lastname">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col">
+                        <input type="email" class="form-control" placeholder="Email" id="email" name="email">
+                    </div>
+                </div>
+                <input type="submit" value="Submit" class="btn btn-primary">
+            </form>
         </div>
-        <div class="form-row">
-            <div class="col">
-                <input type="email" class="form-control" placeholder="Email" id="email" name="email">
-            </div>
+        <div class="col">
+            <h3>Import Users:</h3>
+            <form action="/users/import" method="POST" encType="multipart/form-data">
+                <input class="form-control" type="file" id="formFile" name="userImport">
+                <input type="submit" value="Submit" class="btn btn-primary">
+                <p><strong>NOTE:</strong> This function will not check for duplicate users.</p>
+                <a href="/users/import">Download Sample</a>
+            </form>
         </div>
-        <input type="submit" value="Post" class="btn btn-primary">
-    </form>
+    </div>
+
+
+
+
+
     {{#if users}}
     <h3>Existing users:</h3>
     <table class="table">

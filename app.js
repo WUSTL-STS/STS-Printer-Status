@@ -7,6 +7,7 @@ const methodOverride = require('method-override')
 const cookieParser = require('cookie-parser')
 const session = require('express-session')
 const cron = require('node-cron')
+const fileUpload = require('express-fileupload')
 
 const connectDB = require('./config/db')
 const updateValues = require('./scripts/updatePrinters')
@@ -32,6 +33,9 @@ app.use(express.urlencoded({
     extended: false
 }))
 app.use(express.json())
+
+// File Upload
+app.use(fileUpload())
 
 // Flash messages
 app.use(cookieParser('' + process.env.COOKIE_SECRET))
@@ -92,8 +96,9 @@ app.use('/', require('./routes/index'))
 app.use('/groups', require('./routes/groups'))
 app.use('/printers', require('./routes/printers'))
 app.use('/users', require('./routes/users'))
-app.use('/static', express.static('public/tables'))
 app.use('/login', require('./routes/login'))
+
+app.use('/static', express.static('public/tables'))
 
 // Expose port
 const port = config.port
