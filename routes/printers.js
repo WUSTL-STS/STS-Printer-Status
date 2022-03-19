@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const csv = require('csvtojson')
+const logger = require('../scripts/logger')
 
 const Printer = require('../models/Printer')
 const User = require('../models/User')
@@ -12,7 +13,7 @@ router.get('/', async (req, res) => {
     // const printers = await Printer.find({}).lean()
         res.redirect('/')
     } catch (err) {
-        console.error(err)
+        logger.error(err)
         res.redirect('error/505')
     }
 })
@@ -32,15 +33,17 @@ router.get('/add', async (req, res) => {
                 title: 'No groups exist!',
                 message: 'Please create a printer group before adding a printer.'
             }
+            logger.warn('Tried to add a printer before creating a group')
             res.redirect('/')
         }
         const users = await User.find({}).lean()
         if (!users.length) {
             req.session.message = {
                 type: 'warning',
-                title: 'No user exist!',
+                title: 'No users exist!',
                 message: 'Please create users before adding a printer.'
             }
+            logger.warn('Tried to add a printer before adding users')
             res.redirect('/')
         }
         res.render('printer', {
@@ -48,7 +51,7 @@ router.get('/add', async (req, res) => {
             users
         })
     } catch (err) {
-        console.error(err)
+        logger.error(err)
         return res.render('error/505')
     }
 })
@@ -65,18 +68,27 @@ router.post('/add', async (req, res) => {
         const nameQuery = {}
         nameQuery.firstname = firstname
         nameQuery.lastname = lastname
-        console.log('creating new printer with user object ' + nameQuery)
+        logger.info('creating new printer with user object ' + nameQuery)
         const contactUser = await User.findOne(nameQuery)
 
         // Create new printer object with correct parameters
-        const newPrinter = new Printer()
+        const newPrinter = {}
         newPrinter.location = req.body.location
         newPrinter.url = req.body.url
         newPrinter.model = req.body.model
         newPrinter.contact = contactUser
         newPrinter.toner = [0, 0, 0, 0, 0]
         newPrinter.paper = [true, true, true, true]
-        await newPrinter.save()
+        if (!newPrinter.location || !newPrinter.url) {
+            req.session.message = {
+                type: 'warning',
+                title: 'Form incorrect!',
+                message: 'Please make sure to fill out all required form elements.'
+            }
+            logger.warn('Printer add form incorrect')
+            res.redirect('/printers/add')
+        }
+        await Printer.create(newPrinter)
 
         // Update the group to contain the printer
         const groupQuery = {}
@@ -88,9 +100,10 @@ router.post('/add', async (req, res) => {
             type: 'success',
             message: 'Success!'
         }
+        logger.info(newPrinter.location + ' printer added successfully')
         res.redirect('/')
     } catch (err) {
-        console.error(err)
+        logger.error(err)
         return res.render('error/505')
     }
 })
@@ -108,6 +121,7 @@ router.post('/import', async (req, res) => {
                 title: 'A file was not uploaded!',
                 message: ''
             }
+            logger.warn('Blank form in file upload')
             res.redirect('/users')
         }
 
@@ -118,6 +132,7 @@ router.post('/import', async (req, res) => {
                 title: 'File import error!',
                 message: 'Make sure to upload a CSV and to upload only one file.'
             }
+            logger.warn('File uploaded is not a CSV in printer import')
             res.redirect('/users')
         }
 
@@ -139,11 +154,11 @@ router.post('/import', async (req, res) => {
             const group = await Group.findOne({ name: upload[i].group })
             await group.printers.push(printer)
             await group.save()
-            console.log('imported ' + p.location + ' printer')
+            logger.info('imported ' + p.location + ' printer')
         }
         res.redirect('/')
     } catch (err) {
-        console.error(err)
+        logger.error(err)
         return res.render('error/505')
     }
 })
@@ -156,7 +171,6 @@ router.delete('/:id', async (req, res) => {
         return
     }
     try {
-        console.log('Deleting printer with id ' + req.params.id)
         const g = await Group.findOne({ printers: req.params.id })
         g.printers.pull(req.params.id)
         await g.save()
@@ -166,10 +180,10 @@ router.delete('/:id', async (req, res) => {
             type: 'success',
             message: 'Success!'
         }
-        console.log('success!')
+        logger.info('Deletion of printer with id ' + req.params.id + ' successful')
         res.redirect('/')
     } catch (err) {
-        console.error(err)
+        logger.error(err)
         return res.render('error/505')
     }
 })
@@ -184,11 +198,10 @@ router.get('/:id/', async (req, res) => {
         const groups = await Group.find().lean()
         const users = await User.find().lean()
         p.group = await Group.findOne({ printers: req.params.id }).lean()
-        console.log(p)
 
         res.render('printer', { p, groups, users })
     } catch (err) {
-        console.error(err)
+        logger.error(err)
     }
 })
 
@@ -226,7 +239,7 @@ router.put('/:id/', async (req, res) => {
 
         res.redirect('/')
     } catch (err) {
-        console.error(err)
+        logger.error(err)
     }
 })
 
@@ -237,10 +250,10 @@ router.put('/:id/email', async (req, res) => {
         const updateP = await Printer.findById(req.params.id)
         updateP.email = !updateP.email
         await updateP.save()
-        console.log(updateP.location + ' has email set to ' + updateP.email)
+        logger.info(updateP.location + ' has email set to ' + updateP.email)
         res.redirect('/')
     } catch (err) {
-        console.error(err)
+        logger.error(err)
         return res.render('error/505')
     }
 })

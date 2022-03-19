@@ -14,6 +14,7 @@ const updateValues = require('./scripts/updatePrinters')
 const generateTable = require('./scripts/genTable')
 const sendEmail = require('./scripts/sendEmail')
 const generateReport = require('./scripts/generateReport')
+const logger = require('./scripts/logger')
 
 const config = require('./config/config')
 
@@ -63,9 +64,6 @@ app.use(methodOverride(function (req, res) {
 
 // Connect to MongoDB
 connectDB()
-mongoose.connection.once('open', () => {
-    console.log('Connected to MongoDB')
-})
 
 // Serve CSS from /public
 // eslint-disable-next-line node/no-path-concat
@@ -103,23 +101,23 @@ app.use('/static', express.static('public/tables'))
 // Expose port
 const port = config.port
 app.listen(port, () => {
-    console.log(`Server hosted on port ${port}`)
+    logger.info(`Server hosted on port ${port}`)
 })
 
 // Update database values and create new tables every 3 minutes
-console.log('scheduling update and generation...')
+logger.info('scheduling update and generation...')
 cron.schedule('*/3 * * * *', async () => {
     await updateValues()
     await generateTable()
 }, {})
 
 // Send emails every 3 hours
-console.log('scheduling emails...')
+logger.info('scheduling emails...')
 cron.schedule('0 */' + config.email_hours + ' * * *', async () => {
-    sendEmail().catch(console.error)
+    sendEmail().catch(logger.error)
 }, {})
 
-console.log('scheduling report...')
+logger.info('scheduling report...')
 cron.schedule('0 0 * * 1', async () => {
     await generateReport()
 })

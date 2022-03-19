@@ -3,6 +3,7 @@ const Printer = require('../models/Printer')
 const fs = require('fs')
 const util = require('util')
 const config = require('../config/config')
+const logger = require('../scripts/logger')
 
 const appendLog = util.promisify(fs.appendFile)
 
@@ -12,7 +13,7 @@ async function send () {
         return
     }
     // Look for errors within all the printers
-    console.log('Email started. Querying printers')
+    logger.info('Email script called. Querying printers.')
     const errors = await queryPrinters()
     // Create the nodemailer item that sends the emails
     const transport = await nodemailer.createTransport({
@@ -27,18 +28,18 @@ async function send () {
     // Iterate over the error json array and construct the string of html
     const date = new Date()
     for (const p in errors) {
-        await appendLog('./log/emails_weekly.csv',
+        await appendLog('./logs/emails_weekly.csv',
             date.toString() + ',' + errors[p].contact.firstname + ' ' + errors[p].contact.lastname + ',' + p + '\n')
             .catch((error) => {
-                console.error(error)
+                logger.error(error)
             })
         let html = '<h1>STS Printer Status Report</h1><p>' + errors[p].contact.firstname + ', the following problems ' +
             'have been detected with the ' + p + ' printer:</p><ul>'
         if (errors[p].toner) {
             for (const color in errors[p].toner) {
-		if(errors[p].toner[color] !== null){
-                	html += '<li>The ' + color + ' toner is at ' + errors[p].toner[color] + '%.</li>'
-		}
+                if (errors[p].toner[color] !== null) {
+                    html += '<li>The ' + color + ' toner is at ' + errors[p].toner[color] + '%.</li>'
+                }
             }
         }
         if (errors[p].paper) {
@@ -48,7 +49,7 @@ async function send () {
                 }
             }
         }
-        console.log(`Sending To ${errors[p].contact.email}`)
+        logger.info(`Sending To ${errors[p].contact.email}`)
         html += '</ul><p>Please fix these issues when possible.</p>'
         const msg = await transport.sendMail({
             from: 'student.technology@wustl.edu',
@@ -56,9 +57,9 @@ async function send () {
             subject: '[TEST] STS Printer Status Alert',
             html: html
         })
-        console.log('Message sent: %s', msg.messageId)
+        logger.info('Message sent: %s', msg.messageId)
     }
-    console.log('---emails finished---')
+    logger.info('Finished sending emails')
 }
 
 /*

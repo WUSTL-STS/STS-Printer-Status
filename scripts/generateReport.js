@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer')
+const logger = require('../scripts/logger')
 const fs = require('fs')
 
 async function generateReport () {
@@ -18,12 +19,12 @@ async function generateReport () {
         attachments: [
             {
                 filename: 'report.csv',
-                content: fs.createReadStream('./log/emails_weekly.csv')
+                content: fs.createReadStream('./logs/emails_weekly.csv')
             }
         ],
         text: 'Attached is the weekly status report for STS-managed printers'
     })
-    console.log('Message sent: %s', msg.messageId)
+    logger.info('Message sent: ' + msg.messageId)
 }
 
 module.exports = generateReport

@@ -4,6 +4,7 @@ const router = express.Router()
 const Printer = require('../models/Printer')
 const User = require('../models/User')
 const Group = require('../models/Group')
+const logger = require('../scripts/logger')
 
 const updateValues = require('../scripts/updatePrinters')
 const generateTable = require('../scripts/genTable')
@@ -25,7 +26,7 @@ router.get('/', async (req, res) => {
             groups
         })
     } catch (err) {
-        console.error(err)
+        logger.error(err)
     }
 })
 

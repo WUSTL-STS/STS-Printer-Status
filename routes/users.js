@@ -6,6 +6,7 @@ const User = require('../models/User')
 
 const path = require('path')
 const csv = require('csvtojson')
+const logger = require('../scripts/logger')
 
 // Desc: The page where users are listed and can be created
 // Route: GET /users/
@@ -20,7 +21,7 @@ router.get('/', async (req, res) => {
             users
         })
     } catch (err) {
-        console.error(err)
+        logger.error(err)
         return res.render('error/505')
     }
 })
@@ -34,6 +35,7 @@ router.post('/add', async (req, res) => {
                 type: 'danger',
                 title: 'Please fill out ALL the required forms!'
             }
+            req.error('User add form incorrect')
             res.redirect('/users/add')
         } else {
             await User.create(req.body)
@@ -41,10 +43,11 @@ router.post('/add', async (req, res) => {
                 type: 'primary',
                 message: 'Success!'
             }
+            logger.info('Created user ' + req.body.firstname + ' ' + req.body.lastname)
             res.redirect('/users/')
         }
     } catch (err) {
-        console.error(err)
+        logger.error(err)
         return res.render('error/505')
     }
 })
@@ -62,6 +65,7 @@ router.post('/import', async (req, res) => {
                 title: 'A file was not uploaded!',
                 message: ''
             }
+            logger.warn('no file uploaded user import')
             res.redirect('/users')
         }
 
@@ -72,18 +76,19 @@ router.post('/import', async (req, res) => {
                 title: 'File import error!',
                 message: 'Make sure to upload a CSV and to upload only one file.'
             }
+            logger.warn('User import file error')
             res.redirect('/users')
         }
 
         const upload = await csv().fromString(req.files.userImport.data.toString('utf8'))
         for (let i = 0; i < upload.length; i++) {
             await User.create(upload[i])
-            console.log('imported user ' + i)
+            logger.info('imported user ' + i)
         }
-        console.log('finished importing users')
+        logger.info('finished importing users')
         res.redirect('/users')
     } catch (err) {
-        console.error(err)
+        logger.error(err)
         return res.render('error/505')
     }
 })
@@ -93,27 +98,27 @@ router.post('/import', async (req, res) => {
 router.delete('/:id', async (req, res) => {
     try {
         const userPrinters = await Printer.find({ contact: req.params.id })
-        console.log('trying to delete user with id ' + req.params.id)
+        logger.log('trying to delete user with id ' + req.params.id)
         if (userPrinters && userPrinters.length) {
-            console.error('cannot delete, user is associated with printers')
+            logger.warn('cannot delete, user is associated with printers')
             req.session.message = {
                 type: 'danger',
                 title: 'This user is still associated with some printers!',
                 message: 'Please delete the printers that this user is associated with before deleting this user.'
             }
+            logger.error('Could not delete user with id ' + req.params.id + '. They are still associated with printers')
             res.redirect('/users')
         } else {
-            console.log('attempting deletion...')
             await User.deleteOne({ _id: req.params.id })
             req.session.message = {
                 type: 'primary',
                 message: 'Success!'
             }
-            console.log('deletion successful')
+            logger.info('deletion successful')
             res.redirect('/users')
         }
     } catch (err) {
-        console.error(err)
+        logger.error(err)
         return res.render('error/505')
     }
 })

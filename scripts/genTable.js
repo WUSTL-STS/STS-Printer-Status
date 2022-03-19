@@ -1,10 +1,10 @@
 const fs = require('fs')
+const logger = require('../scripts/logger')
 const config = require('../config/config')
 
 const Group = require('../models/Group')
 
-async function generateTable() {
-    console.log('Generating table...')
+async function generateTable () {
     const groups = await Group.find({}).populate({ path: 'printers', populate: { path: 'contact' } }).sort({ 'printers.location': -1 })
     for (let i = 0; i < groups.length; i++) {
         const g = groups[i]
@@ -69,7 +69,7 @@ async function generateTable() {
         // Write the file to the /public/tables directory
         fs.writeFile('./public/tables/' + (g.groupName).replace(/ /g, '') + '.html', table, (err) => {
             if (err) { throw err }
-            console.log('---Finished Generating File---')
+            logger.info('Finished generating table for ' + g.groupName)
         })
     }
 }

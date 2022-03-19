@@ -1,6 +1,8 @@
 const express = require('express')
 const router = express.Router()
 
+const logger = require('../scripts/logger')
+
 const Group = require('../models/Group')
 
 // Desc: Return information about a specific group at its mongo-assigned ID
@@ -15,8 +17,9 @@ router.get('/:id', async (req, res) => {
         if (!group) {
             req.session.message = {
                 type: 'warning',
-                title: 'I don\'t recognize that group ID :('
+                title: 'Group ID not recognized'
             }
+            logger.warn('Group ID ' + req.params.id + ' not recognized')
             res.redirect('/')
         } else {
             res.render('group', {
@@ -24,7 +27,7 @@ router.get('/:id', async (req, res) => {
             })
         }
     } catch (err) {
-        console.error(err)
+        logger.error(err)
         return res.render('error/505')
     }
 })
@@ -36,8 +39,9 @@ router.post('/add', async (req, res) => {
         if (req.body.groupName == '' || req.body.groupName == null) {
             req.session.message = {
                 type: 'danger',
-                title: 'No name was entered :('
+                title: 'No name was entered'
             }
+            logger.warn('No groupname entered')
             res.redirect('/')
         } else {
             await Group.create(req.body)
@@ -45,10 +49,11 @@ router.post('/add', async (req, res) => {
                 type: 'primary',
                 message: 'Success!'
             }
+            logger.info('Group ' + req.body.groupName + ' created')
             res.redirect('/')
         }
     } catch (err) {
-        console.error(err)
+        logger.error(err)
         return res.render('error/505')
     }
 })
@@ -58,23 +63,24 @@ router.post('/add', async (req, res) => {
 router.delete('/:id', async (req, res) => {
     try {
         const g = await Group.findById(req.params.id).lean()
-        console.log(g)
-        if (g.printers.length == 0) {
+        if (g.printers.length === 0) {
             await Group.deleteOne({ _id: req.params.id })
             req.session.message = {
                 type: 'success',
                 message: 'Success!'
             }
+            logger.info('Deleted group ' + g.name)
             res.redirect('/')
         } else {
             req.session.message = {
                 type: 'warning',
                 title: 'There are still printers in this group!'
             }
+            logger.warn('Attempted deletion of ' + g.name + ' but printers still exist within the group.')
             res.redirect('/')
         }
     } catch (err) {
-        console.error(err)
+        logger.error(err)
         return res.render('error/505')
     }
 })

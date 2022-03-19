@@ -1,4 +1,5 @@
 const snmp = require('snmp-native')
+const logger = require('../scripts/logger')
 
 const Printer = require('../models/Printer')
 
@@ -6,7 +7,6 @@ let session // Create global session variable
 
 // This is the function that's called in order to update the values
 async function updateValues () {
-    console.log('Updating printer values...')
     try {
         const printers = await Printer.find() // Get a list of all the printers and iterate over them
         for (let i = 0; i < printers.length; i++) {
@@ -17,14 +17,14 @@ async function updateValues () {
                 printers[i].set('toner', toner)
                 printers[i].set('paper', paper)
                 await printers[i].save()
-                console.log('successfully queried ' + printers[i].location)
+                logger.info('successfully queried ' + printers[i].location)
             } catch (err) {
-                console.error(printers[i].location + ' ' + err)
+                logger.error(printers[i].location + ' ' + err)
             }
         }
-        console.log('---Finished Updating Values---')
+        logger.info('Finished updating printer values')
     } catch (err) {
-        console.error(err)
+        logger.error('scripts/updatePrinters updateValues ' + err)
     }
 }
 
@@ -39,7 +39,6 @@ function fetchToner () {
             } else {
                 // Create the array and resolve the promise using the array
                 for (let i = 0; i < varbinds.length; i++) {
-                    // console.log(varbinds[i].value)
                     toner[i] = parseInt(varbinds[i].value)
                 }
                 resolve(toner)

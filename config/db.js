@@ -1,18 +1,24 @@
 const mongoose = require('mongoose')
 const config = require('../config/config')
+const logger = require('../scripts/logger')
 
-const connectDB = async () => {
-  try {
-    const conn = await mongoose.connect(
-      (process.env.DEPLOY === 'docker') ? config.URI_Docker : config.URI_Local, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-      })
-    console.log(`MongoDB Connected: ${conn.connection.host}`)
-  } catch (err) {
-    console.error(err)
-    process.exit(1)
-  }
+const connectDB = async (uri, callback) => {
+    try {
+        let url
+        if (process.env.DEPLOY === 'docker') {
+            url = config.URI_Docker
+        } else {
+            url = config.URI_Local
+        }
+        const conn = await mongoose.connect(url, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        })
+        logger.info(`MongoDB Connected: ${conn.connection.host}`)
+    } catch (err) {
+        logger.error(err)
+        process.exit(1)
+    }
 }
 
 module.exports = connectDB
