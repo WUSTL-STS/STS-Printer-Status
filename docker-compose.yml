@@ -15,6 +15,7 @@ services:
             - DEPLOY=docker
         volumes:
             - ./public/tables:/app/public/tables
+            - ./logs:/app/logs
     mongo:
         image: mongo
         ports:
