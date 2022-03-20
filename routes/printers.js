@@ -143,6 +143,7 @@ router.post('/import', async (req, res) => {
             p.url = upload[i].url
             if (!upload[i].contact_email) {
                 p.contact = await User.findOne({ email: 'student.technology@wustl.edu' })
+                p.email = false
             } else {
                 p.contact = await User.findOne({ email: upload[i].contact_email })
             }
@@ -151,7 +152,8 @@ router.post('/import', async (req, res) => {
 
             const printer = await Printer.create(p)
             await printer.save()
-            const group = await Group.findOne({ name: upload[i].group })
+            const group = await Group.findOne({ groupName: upload[i].group })
+            // console.log(upload[i].group)
             await group.printers.push(printer)
             await group.save()
             logger.info('imported ' + p.location + ' printer')
@@ -159,6 +161,7 @@ router.post('/import', async (req, res) => {
         res.redirect('/')
     } catch (err) {
         logger.error(err)
+        console.error(err)
         return res.render('error/505')
     }
 })

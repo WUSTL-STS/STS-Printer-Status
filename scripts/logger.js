@@ -1,14 +1,22 @@
-const { createLogger, format, transports } = require('winston')
+const winston = require('winston')
 
-module.exports = createLogger({
+const logger = winston.createLogger({
     transports:
-        new transports.File({
+        new winston.transports.File({
             filename: 'logs/server.log',
             level: 'warn',
-            format: format.combine(
-                format.timestamp({ format: 'MMM-DD-YYYY HH:mm:ss' }),
-                format.align(),
-                format.printf(info => `${info.level}: ${[info.timestamp]}: ${info.message}`)
+            format: winston.format.combine(
+                winston.format.timestamp({ format: 'MMM-DD-YYYY HH:mm:ss' }),
+                winston.format.align(),
+                winston.format.printf(info => `${info.level}: ${[info.timestamp]}: ${info.message}`)
             )
         })
 })
+
+if (process.env.DEPLOY !== 'docker') {
+    logger.add(new winston.transports.Console({
+        format: winston.format.simple()
+    }))
+}
+
+module.exports = logger
