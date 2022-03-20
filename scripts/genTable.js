@@ -5,7 +5,7 @@ const config = require('../config/config')
 const Group = require('../models/Group')
 
 async function generateTable () {
-    const groups = await Group.find({}).populate({ path: 'printers', populate: { path: 'contact' } }).sort({ 'printers.location': -1 })
+    const groups = await Group.find({}).populate({ path: 'printers', populate: { path: 'contact' }, options: { sort: { location: -1 } } })
     for (let i = 0; i < groups.length; i++) {
         const g = groups[i]
         // Add bootstrap, set up the table head

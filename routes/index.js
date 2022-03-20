@@ -18,7 +18,7 @@ router.get('/', async (req, res) => {
         res.redirect('login')
     }
     try {
-        const groups = await Group.find({}).populate({ path: 'printers', populate: { path: 'contact' } }).lean()
+        const groups = await Group.find({}).populate({ path: 'printers', populate: { path: 'contact' }, options: { sort: { location: -1 } } }).lean()
         // for (g of groups) {
         //     await generateTable(g)
         // }
