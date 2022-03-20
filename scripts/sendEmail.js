@@ -54,7 +54,7 @@ async function send () {
         const msg = await transport.sendMail({
             from: 'student.technology@wustl.edu',
             to: errors[p].contact.email,
-            subject: '[TEST] STS Printer Status Alert',
+            subject: 'STS Printer Status Alert',
             html: html
         })
         logger.info('Message sent: %s', msg.messageId)
