@@ -108,6 +108,7 @@ app.listen(port, () => {
 logger.info('scheduling update and generation...')
 cron.schedule('*/3 * * * *', async () => {
     await updateValues()
+	console.log('finished')
     await generateTable()
 }, {})
 
