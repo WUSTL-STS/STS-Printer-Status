@@ -73,9 +73,9 @@ router.post('/add', async (req, res) => {
         // Create new printer object with correct parameters
         const newPrinter = {}
         newPrinter.location = req.body.location
-        const existing = await Printer.find({ location: newPrinter.location })
-        if (existing) {
-            console.log(existing)
+        const existing = await Printer.findOne({ location: newPrinter.location })
+        if (existing !== null) {
+            console.log('found' + existing.location)
             req.session.message = {
                 type: 'warning',
                 title: 'Form incorrect!',
@@ -86,6 +86,7 @@ router.post('/add', async (req, res) => {
         }
         newPrinter.url = req.body.url
         newPrinter.model = req.body.model
+        newPrinter.tag = req.body.tag
         newPrinter.contact = contactUser
         newPrinter.toner = [0, 0, 0, 0, 0]
         newPrinter.paper = [true, true, true, true]
@@ -98,13 +99,13 @@ router.post('/add', async (req, res) => {
             logger.warn('Printer add form incorrect')
             return res.redirect('/printers/add')
         }
-        await Printer.create(newPrinter)
+        const saved_printer = await Printer.create(newPrinter)
 
         // Update the group to contain the printer
         const groupQuery = {}
         groupQuery.groupName = req.body.group
         const printerGroup = await Group.findOne(groupQuery)
-        printerGroup.printers.push(newPrinter)
+        printerGroup.printers.push(saved_printer)
         await printerGroup.save()
         req.session.message = {
             type: 'success',
@@ -114,6 +115,7 @@ router.post('/add', async (req, res) => {
         return res.redirect('/')
     } catch (err) {
         logger.error(err)
+        console.error(err)
         return res.render('error/505')
     }
 })

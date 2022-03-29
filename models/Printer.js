@@ -22,10 +22,9 @@ const PrinterSchema = new mongoose.Schema({
         type: Boolean,
         default: 'true' // If true, then send emails
     },
-    // id: {
-    //     type: Number,
-    //     required: true
-    // },
+    tag: {
+        type: String
+    },
     toner: [Number], // blk, cyn, mag, yel, fuser, status?, feeder?, img transfer?
     paper: [Boolean], // tray 2, 3, 4, 5
     status: {

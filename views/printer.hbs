@@ -42,6 +42,10 @@
                     {{/each}}
                 </select>
             </div>
+            <div class="col">
+                <label for="tagInput">Quantum Service Tag</label>
+                <input class="form-control" id="tag" placeholder="Service Tag" name="tag" value="{{p.tag}}">
+            </div>
         </div>
         <input type="submit" value="Post" class="btn btn-primary">
     </form>
@@ -83,6 +87,10 @@
                     <option value="{{groupName}}">{{groupName}}</option>
                     {{/each}}
                 </select>
+            </div>
+            <div class="col">
+                <label for="tagInput">Quantum Service Tag</label>
+                <input class="form-control" id="tag" placeholder="Service Tag" name="tag">
             </div>
         </div>
         <input type="submit" value="Post" class="btn btn-primary">

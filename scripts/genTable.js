@@ -13,7 +13,7 @@ async function generateTable() {
         const g = groups[i]
         const time = moment().tz('America/Chicago').format()
         // Add bootstrap, set up the table head
-        let table = '<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous"><table class="table table-striped"><tbody><tr><th colspan="100" style="text-align: center">' + g.groupName + ' - ' + time + '</th></tr><tr><th>Location</th><th>Black</th><th>Cyan</th><th>Magenta</th><th>Yellow</th><th>Fuser</th><th>Tray2</th><th>Tray3</th><th>Tray4</th><th>Tray5</th><th>Status</th><th>Model</th></tr>'
+        let table = '<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous"><table class="table table-striped"><tbody><tr><th colspan="100" style="text-align: center">' + g.groupName + ' - ' + time + '</th></tr><tr><th>Location</th><th>Black</th><th>Cyan</th><th>Magenta</th><th>Yellow</th><th>Fuser</th><th>Tray2</th><th>Tray3</th><th>Tray4</th><th>Tray5</th><th>Status</th><th>Model</th><th>Service Tag</th></tr>'
         // Add message if there are no printers in the group
         if (g.printers.length === 0) {
             table += '<tr class="table-warning"><th colspan="100" style="text-align: center">There are no printers in this group!</th></tr>'
@@ -66,6 +66,7 @@ async function generateTable() {
                 }
                 table += '<td>' + (p.status == null ? '' : p.status) + '</td>'
                 table += '<td>' + p.model + '</td>'
+                table += '<td>' + p.tag + '</td>'
             }
         }
 
