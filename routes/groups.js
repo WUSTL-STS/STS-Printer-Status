@@ -9,7 +9,7 @@ const Group = require('../models/Group')
 // Route: GET /groups/id
 router.get('/:id', async (req, res) => {
     if (!req.session.loggedIn) {
-        res.redirect('login')
+        return res.redirect('login')
         return
     }
     try {
@@ -20,7 +20,7 @@ router.get('/:id', async (req, res) => {
                 title: 'Group ID not recognized'
             }
             logger.warn('Group ID ' + req.params.id + ' not recognized')
-            res.redirect('/')
+            return res.redirect('/')
         } else {
             res.render('group', {
                 group
@@ -42,7 +42,7 @@ router.post('/add', async (req, res) => {
                 title: 'No name was entered'
             }
             logger.warn('No groupname entered')
-            res.redirect('/')
+            return res.redirect('/')
         } else {
             await Group.create(req.body)
             req.session.message = {
@@ -50,7 +50,7 @@ router.post('/add', async (req, res) => {
                 message: 'Success!'
             }
             logger.info('Group ' + req.body.groupName + ' created')
-            res.redirect('/')
+            return res.redirect('/')
         }
     } catch (err) {
         logger.error(err)
@@ -70,14 +70,14 @@ router.delete('/:id', async (req, res) => {
                 message: 'Success!'
             }
             logger.info('Deleted group ' + g.name)
-            res.redirect('/')
+            return res.redirect('/')
         } else {
             req.session.message = {
                 type: 'warning',
                 title: 'There are still printers in this group!'
             }
             logger.warn('Attempted deletion of ' + g.name + ' but printers still exist within the group.')
-            res.redirect('/')
+            return res.redirect('/')
         }
     } catch (err) {
         logger.error(err)

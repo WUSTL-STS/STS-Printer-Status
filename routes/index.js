@@ -15,7 +15,7 @@ const generateReport = require('../scripts/generateReport')
 // Route: GET /
 router.get('/', async (req, res) => {
     if (!req.session.loggedIn) {
-        res.redirect('login')
+        return res.redirect('login')
     }
     try {
         const groups = await Group.find({}).populate({ path: 'printers', populate: { path: 'contact' }, options: { sort: { location: 1 } } }).lean()
@@ -36,43 +36,43 @@ router.get('/flash', function (req, res) {
         type: 'danger',
         message: 'Holy Guacamole!'
     }
-    res.redirect('/')
+    return res.redirect('/')
 })
 
 router.get('/fetch', async function (req, res) {
     if (!req.session.loggedIn) {
-        res.redirect('login')
+        return res.redirect('login')
         return
     }
     updateValues()
-    res.redirect('/')
+    return res.redirect('/')
 })
 
 router.get('/table', async function (req, res) {
     if (!req.session.loggedIn) {
-        res.redirect('login')
+        return res.redirect('login')
         return
     }
     await generateTable()
-    res.redirect('/')
+    return res.redirect('/')
 })
 
 router.get('/email', async function (req, res) {
     if (!req.session.loggedIn) {
-        res.redirect('login')
+        return res.redirect('login')
         return
     }
     await sendEmail()
-    res.redirect('/')
+    return res.redirect('/')
 })
 
 router.get('/report', async function (req, res) {
     if (!req.session.loggedIn) {
-        res.redirect('login')
+        return res.redirect('login')
         return
     }
     await generateReport()
-    res.redirect('/')
+    return res.redirect('/')
 })
 
 module.exports = router

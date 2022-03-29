@@ -8,7 +8,7 @@ const router = express.Router()
 router.get('/', (req, res) => {
     if (process.env.DEPLOY !== 'docker') {
         req.session.loggedIn = true
-        res.redirect('/')
+        return res.redirect('/')
     }
     res.render('login')
 })
@@ -16,7 +16,7 @@ router.get('/', (req, res) => {
 router.post('/', (req, res) => {
     if (req.body.password === process.env.SITE_PASS) {
         req.session.loggedIn = true
-        res.redirect('/')
+        return res.redirect('/')
     } else {
         res.render('login')
     }

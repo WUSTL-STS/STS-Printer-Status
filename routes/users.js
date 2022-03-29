@@ -12,7 +12,7 @@ const logger = require('../scripts/logger')
 // Route: GET /users/
 router.get('/', async (req, res) => {
     if (!req.session.loggedIn) {
-        res.redirect('/login')
+        return res.redirect('/login')
         return
     }
     try {
@@ -36,7 +36,7 @@ router.post('/add', async (req, res) => {
                 title: 'Please fill out ALL the required forms!'
             }
             req.error('User add form incorrect')
-            res.redirect('/users/add')
+            return res.redirect('/users/add')
         } else {
             await User.create(req.body)
             req.session.message = {
@@ -44,7 +44,7 @@ router.post('/add', async (req, res) => {
                 message: 'Success!'
             }
             logger.info('Created user ' + req.body.firstname + ' ' + req.body.lastname)
-            res.redirect('/users/')
+            return res.redirect('/users/')
         }
     } catch (err) {
         logger.error(err)
@@ -66,7 +66,7 @@ router.post('/import', async (req, res) => {
                 message: ''
             }
             logger.warn('no file uploaded user import')
-            res.redirect('/users')
+            return res.redirect('/users')
         }
 
         // Make sure the file is a csv and that there is 1 file
@@ -77,7 +77,7 @@ router.post('/import', async (req, res) => {
                 message: 'Make sure to upload a CSV and to upload only one file.'
             }
             logger.warn('User import file error')
-            res.redirect('/users')
+            return res.redirect('/users')
         }
 
         const upload = await csv().fromString(req.files.userImport.data.toString('utf8'))
@@ -86,7 +86,7 @@ router.post('/import', async (req, res) => {
             logger.info('imported user ' + i)
         }
         logger.info('finished importing users')
-        res.redirect('/users')
+        return res.redirect('/users')
     } catch (err) {
         logger.error(err)
         return res.render('error/505')
@@ -107,7 +107,7 @@ router.delete('/:id', async (req, res) => {
                 message: 'Please delete the printers that this user is associated with before deleting this user.'
             }
             logger.error('Could not delete user with id ' + req.params.id + '. They are still associated with printers')
-            res.redirect('/users')
+            return res.redirect('/users')
         } else {
             await User.deleteOne({ _id: req.params.id })
             req.session.message = {
@@ -115,7 +115,7 @@ router.delete('/:id', async (req, res) => {
                 message: 'Success!'
             }
             logger.info('deletion successful')
-            res.redirect('/users')
+            return res.redirect('/users')
         }
     } catch (err) {
         logger.error(err)
