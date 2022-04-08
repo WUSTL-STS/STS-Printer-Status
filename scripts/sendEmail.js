@@ -13,7 +13,7 @@ async function send () {
         return
     }
     // Look for errors within all the printers
-    logger.info('Email script called. Querying printers.')
+    logger.info('Email script called. Querying printers from database.')
     const errors = await queryPrinters()
     // Create the nodemailer item that sends the emails
     const transport = await nodemailer.createTransport({
