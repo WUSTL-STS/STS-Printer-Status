@@ -57,11 +57,11 @@ async function generateTable() {
                     } else {
                         // Make the cell red if the paper is empty
                         if (p.paper[i] == false) {
-                            table += '<td class="table-danger">'
+                            table += '<td class="table-danger">Empty'
                         } else {
-                            table += '<td>'
+                            table += '<td>Filled'
                         }
-                        table += p.paper[i] + '</td>'
+                        table += '</td>'
                     }
                 }
                 table += '<td>' + (p.status == null ? '' : p.status) + '</td>'
