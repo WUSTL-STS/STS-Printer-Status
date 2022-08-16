@@ -107,6 +107,7 @@ app.listen(port, () => {
 // Update database values and create new tables every 3 minutes
 logger.info('scheduling update and generation...')
 cron.schedule('*/3 * * * *', async () => {
+	logger.info('update triggering')
     await updateValues()
 	console.log('finished')
     await generateTable()
@@ -115,10 +116,12 @@ cron.schedule('*/3 * * * *', async () => {
 // Send emails every 3 hours
 logger.info('scheduling emails...')
 cron.schedule('0 */' + config.email_hours + ' * * *', async () => {
+	logger.info('sendEmail triggering')
     sendEmail().catch(logger.error)
 }, {})
 
 logger.info('scheduling report...')
 cron.schedule('0 0 * * 1', async () => {
+	logger.info('report triggering')
     await generateReport()
 })

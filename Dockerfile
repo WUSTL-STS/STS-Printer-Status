@@ -11,4 +11,6 @@ RUN npm install
 # Bundle app source
 COPY . /app
 
+ENV TZ="America/Chicago"
+
 CMD ["npm", "run", "prod"]
