@@ -10,8 +10,9 @@ async function updateValues () {
     try {
         const printers = await Printer.find() // Get a list of all the printers and iterate over them
         for (let i = 0; i < printers.length; i++) {
+            logger.info('attempting query for ' + printers[i].location)
             try {
-                session = new snmp.Session({ host: printers[i].url, timeouts: [1000, 2000, 4000, 8000] }) // Create new SNMP session
+                session = new snmp.Session({ host: printers[i].url, timeouts: [2000, 2000, 2000, 2000] }) // Create new SNMP session
                 const toner = await fetchToner()
                 const paper = await fetchPaper()
                 printers[i].set('toner', toner)
