@@ -162,6 +162,8 @@ router.post('/import', async (req, res) => {
 
             upload[i].model ? p.model = upload[i].model : p.model = 'M577'
 
+            p.tag = upload[i].service_tag
+
             const printer = await Printer.create(p)
             await printer.save()
             const group = await Group.findOne({ groupName: upload[i].group })
