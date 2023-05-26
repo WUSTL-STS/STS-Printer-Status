@@ -21,6 +21,9 @@ async function updateValues () {
                 logger.info('successfully queried ' + printers[i].location)
             } catch (err) {
                 logger.error(printers[i].location + ' ' + err)
+                printers[i].set('toner', [0,0,0,0,0,0,0,0])
+                printers[i].set('paper', [0,0,0,0])
+                await printers[i].save()
             }
         }
         logger.info('Finished updating printer values')
