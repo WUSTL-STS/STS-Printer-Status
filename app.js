@@ -125,3 +125,5 @@ cron.schedule('0 0 * * 1', async () => {
 	logger.info('report triggering')
     await generateReport()
 })
+
+console.log("Hello!");
