@@ -1,5 +1,5 @@
 const fs = require('fs')
-const logger = require('../scripts/logger')
+const logger = require('./logger')
 const config = require('../config/config')
 
 const Group = require('../models/Group')

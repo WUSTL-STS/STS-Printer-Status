@@ -4,7 +4,7 @@
     "description": "Printer status report for STS at Washington University in St. Louis",
     "main": "app.js",
     "scripts": {
-        "dev": "docker run -p \"27017:27017\" --name \"mongo\" -d mongo",
+        "dev": "docker compose up mongo -d && nodemon -L app.js",
         "prod": "node app",
         "start": "nodemon -L app.js"
     },
@@ -45,6 +45,7 @@
         "eslint-plugin-import": "^2.25.4",
         "eslint-plugin-node": "^11.1.0",
         "eslint-plugin-promise": "^5.2.0",
-        "nodemon": "^2.0.15"
+        "nodemon": "^2.0.15",
+        "typescript": "^5.1.6"
     }
 }

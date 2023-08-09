@@ -1,5 +1,5 @@
 const nodemailer = require('nodemailer')
-const logger = require('../scripts/logger')
+const logger = require('./logger')
 const fs = require('fs')
 
 async function generateReport () {

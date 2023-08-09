@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+      "target": "ESNext",
+      "module": "CommonJS",
+      "outDir": ".",
+      "rootDir": "./Typescripts",
+    },
+    "include": ["Typescripts/**/*.ts"],
+    "exclude": ["node_modules",]
+  }
+  

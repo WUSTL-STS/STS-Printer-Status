@@ -1,5 +1,5 @@
 const snmp = require('snmp-native')
-const logger = require('../scripts/logger')
+const logger = require('./logger')
 
 const Printer = require('../models/Printer')
 

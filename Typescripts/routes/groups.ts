@@ -4,7 +4,7 @@ const logger = require('../scripts/logger');
 const Group = require('../models/Group');
 // Desc: Return information about a specific group at its mongo-assigned ID
 // Route: GET /groups/id 
-router.get('/:id', async (req, res) => {
+router.get('/:id', async (req:any, res) => {
     if (!req.session.loggedIn) {
         return res.redirect('login');
         return;

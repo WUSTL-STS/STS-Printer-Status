@@ -1,4 +1,5 @@
-const mongoose = require('mongoose')
+//const mongoose = require('mongoose')
+
 const PrinterSchema = new mongoose.Schema({
     location: {
         type: String,
@@ -24,10 +25,12 @@ const PrinterSchema = new mongoose.Schema({
     tag: {
         type: String
     },
-    toner: [Number],
-    paper: [Boolean],
+    toner: [Number], // blk, cyn, mag, yel, fuser, status?, feeder?, img transfer?
+    paper: [Boolean], // tray 2, 3, 4, 5
     status: {
         type: String
     }
-});
-module.exports = mongoose.model('Printer', PrinterSchema);
+
+})
+
+module.exports = mongoose.model('Printer', PrinterSchema)

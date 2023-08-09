@@ -3,7 +3,7 @@ const Printer = require('../models/Printer')
 const fs = require('fs')
 const util = require('util')
 const config = require('../config/config')
-const logger = require('../scripts/logger')
+const logger = require('./logger')
 
 const appendLog = util.promisify(fs.appendFile)
 
