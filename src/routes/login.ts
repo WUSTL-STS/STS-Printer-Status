@@ -1,9 +1,9 @@
-//const express = require('express')
+import express from 'express'
 
-//const config = require('../config/config')
-//const logger = require('../scripts/logger')
+const config = require('../config/config')
+const logger = require('../scripts/logger')
 
-//const router = express.Router()
+const router = express.Router()
 
 router.get('/', (req, res) => {
     if (process.env.DEPLOY !== 'docker') {
@@ -12,7 +12,7 @@ router.get('/', (req, res) => {
     }
     res.render('login')
 })
-
+ 
 router.post('/', (req, res) => {
     if (req.body.password === process.env.SITE_PASS) {
         req.session.loggedIn = true
@@ -22,13 +22,6 @@ router.post('/', (req, res) => {
     }
 })
 
-module.exports = router
-//const express = require('express')
-
-//const config = require('../config/config')
-//const logger = require('../scripts/logger')
-
-//const router = express.Router()
 
 router.get('/', (req, res) => {
     if (process.env.DEPLOY !== 'docker') {

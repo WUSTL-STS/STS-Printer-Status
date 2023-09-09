@@ -4,9 +4,10 @@
     "description": "Printer status report for STS at Washington University in St. Louis",
     "main": "app.js",
     "scripts": {
-        "dev": "docker compose up mongo -d && nodemon -L app.js",
+        "dev": "docker compose up mongo -d && nodemon -L app.js && npx",
         "prod": "node app",
-        "start": "nodemon -L app.js"
+        "start": "nodemon -L app.js",
+        "watch": "tsc --watch"
     },
     "repository": {
         "type": "git",

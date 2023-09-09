@@ -1,3 +1,4 @@
+import mongoose from 'mongoose'
 //const mongoose = require('mongoose')
 
 const PrinterSchema = new mongoose.Schema({

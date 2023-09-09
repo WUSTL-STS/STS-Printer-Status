@@ -1,10 +1,11 @@
-//const express = require('express')
-//const router = express.Router()
-
+import express from 'express'
+const router = express.Router()
+ 
 const Printer = require('../models/Printer')
 const User = require('../models/User')
-//const Group = require('../models/Group')
-//const logger = require('../scripts/logger')
+
+const Group = require('../models/Group')
+const logger = require('../scripts/logger')
 
 const updateValues = require('../scripts/updatePrinters')
 const generateTable = require('../scripts/genTable')

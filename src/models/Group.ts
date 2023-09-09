@@ -1,4 +1,5 @@
-const mongoose = require('mongoose')
+//const mongoose = require('mongoose')
+import mongoose from 'mongoose'
 
 const GroupSchema = new mongoose.Schema({
     groupName: String,
@@ -7,5 +8,5 @@ const GroupSchema = new mongoose.Schema({
         ref: 'Printer'
     }
 })
-
+ 
 module.exports = mongoose.model('Group', GroupSchema)

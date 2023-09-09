@@ -1,7 +1,12 @@
-const express = require('express')
-const config = require('../config/config')
-const logger = require('../scripts/logger')
-const router = express.Router()
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const config = require('../config/config');
+const logger = require('../scripts/logger');
+const router = express_1.default.Router();
 router.get('/', (req, res) => {
     if (process.env.DEPLOY !== 'docker') {
         req.session.loggedIn = true;
@@ -18,11 +23,6 @@ router.post('/', (req, res) => {
         res.render('login');
     }
 });
-module.exports = router;
-//const express = require('express')
-//const config = require('../config/config')
-//const logger = require('../scripts/logger')
-//const router = express.Router()
 router.get('/', (req, res) => {
     if (process.env.DEPLOY !== 'docker') {
         req.session.loggedIn = true;
