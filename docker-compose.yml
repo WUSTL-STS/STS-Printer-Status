@@ -7,7 +7,7 @@ services:
             context: ./
             dockerfile: Dockerfile
         ports: 
-            - "8030:80"
+            - "80:80"
         container_name: printerstatus
         links:
             - mongo
