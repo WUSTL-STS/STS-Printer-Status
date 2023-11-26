@@ -3,6 +3,7 @@
     "version": "1.0.0",
     "description": "Printer status report for STS at Washington University in St. Louis",
     "main": "app.js",
+    "private": true,
     "scripts": {
         "dev": "docker compose up mongo -d && nodemon -L app.js",
         "prod": "node app"
