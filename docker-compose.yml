@@ -11,6 +11,8 @@ services:
         container_name: printerstatus
         links:
             - mongo
+        env_file:
+            - ./config/.env
         environment:
             - DEPLOY=docker
         volumes:
