@@ -11,12 +11,17 @@ const connectDB = async (uri, callback) => {
     }
     logger.info("Attempting connection at " + url)
     try {
-        const conn = await mongoose.connect(url, {
-            "auth": { "authSource": "admin" },
-            "user": process.env.MONGO_USER,
-            "pass": process.env.MONGO_PASSWORD
-        })
-        logger.info(`MongoDB Connected: ${conn.connection.host}`)
+        // if user set, connect with user + pass
+        if (process.env.MONGO_USER) {
+            const conn = await mongoose.connect(url, {
+                "user": process.env.MONGO_USER,
+                "pass": process.env.MONGO_PASSWORD
+            })
+            logger.info(`MongoDB Connected: ${conn.connection.host}`)
+        } else {
+            const conn = await mongoose.connect(url)
+            logger.info(`MongoDB Connected: ${conn.connection.host}`)
+        }
     } catch (err) {
         logger.error(err.message)
         process.exit(1)
