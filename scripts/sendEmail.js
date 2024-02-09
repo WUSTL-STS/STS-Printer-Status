@@ -18,7 +18,7 @@ async function send () {
     // Create the nodemailer item that sends the emails
     const transport = nodemailer.createTransport({
         host: 'mail.mx.wustl.edu',
-        port: 587,
+        port: 25,
         secure: false
         // auth: {
         //     user: 'student.technology@wustl.edu',
