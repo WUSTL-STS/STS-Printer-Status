@@ -17,8 +17,8 @@ async function send () {
     const errors = await queryPrinters()
     // Create the nodemailer item that sends the emails
     const transport = nodemailer.createTransport({
-        host: 'mail.mx.wustl.edu',
-        port: 25,
+        host: 'rsmtp.mx.wustl.edu',
+        port: 587,
         secure: false
         // auth: {
         //     user: 'student.technology@wustl.edu',
