@@ -16,14 +16,14 @@ async function send () {
     logger.info('Email script called. Querying printers from database.')
     const errors = await queryPrinters()
     // Create the nodemailer item that sends the emails
-    const transport = await nodemailer.createTransport({
-        host: 'outlook.office365.com',
+    const transport = nodemailer.createTransport({
+        host: 'mail.mx.wustl.edu',
         port: 587,
-        secure: false,
-        auth: {
-            user: 'student.technology@go.wustl.edu',
-            pass: process.env.EMAIL_PASS
-        }
+        secure: false
+        // auth: {
+        //     user: 'student.technology@wustl.edu',
+        //     pass: process.env.EMAIL_PASS
+        // }
     })
     // Iterate over the error json array and construct the string of html
     const date = new Date()
