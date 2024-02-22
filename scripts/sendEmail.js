@@ -28,10 +28,9 @@ async function send () {
     // Iterate over the error json array and construct the string of html
     const date = new Date()
     for (const p in errors) {
-        await appendLog('./logs/emails_weekly.csv',
-            date.toString() + ',' + errors[p].contact.firstname + ' ' + errors[p].contact.lastname + ',' + p + '\n')
+        await appendLog('./logs/emails_weekly.csv', date.toString() + ',' + errors[p].contact.firstname + ' ' + errors[p].contact.lastname + ',' + p + '\n')
             .catch((error) => {
-                logger.error(error)
+                logger.error('error writing to weekly email logfile' + error)
             })
         let html = '<h1>STS Printer Status Report</h1><p>' + errors[p].contact.firstname + ', the following problems ' +
             'have been detected with the ' + p + ' printer:</p><ul>'
@@ -56,8 +55,11 @@ async function send () {
             to: errors[p].contact.email,
             subject: 'STS Printer Status Alert',
             html: html
+        }).then(() => {
+            logger.info('Message sent: %s', msg.messageId)
+        }).catch((error) => {
+            logger.error(`error sending email to ${errors[p].contact.email} -- ${error}`)
         })
-        logger.info('Message sent: %s', msg.messageId)
     }
     logger.info('Finished sending emails')
 }

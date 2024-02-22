@@ -23,8 +23,11 @@ async function generateReport () {
             }
         ],
         text: 'Attached is the weekly status report for STS-managed printers'
+    }).then(() => {
+        logger.info('Message sent: ' + msg.messageId)
+    }).catch((error) => {
+        logger.error('error sending email to ' + process.env.REPORT_TARGET + ' -- ' + error)
     })
-    logger.info('Message sent: ' + msg.messageId)
 }
 
 module.exports = generateReport
