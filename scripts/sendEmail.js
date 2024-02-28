@@ -50,76 +50,77 @@ async function send () {
         }
         logger.info(`Sending To ${errors[p].contact.email}`)
         html += '</ul><p>Please fix these issues when possible.</p>'
-        const msg = await transport.sendMail({
-            from: 'student.technology@wustl.edu',
-            to: errors[p].contact.email,
-            subject: 'STS Printer Status Alert',
-            html: html
-        }).then(() => {
+        try {
+            const msg = await transport.sendMail({
+                from: 'student.technology@wustl.edu',
+                to: errors[p].contact.email,
+                subject: 'STS Printer Status Alert',
+                html: html
+            })
             logger.info('Message sent: %s', msg.messageId)
-        }).catch((error) => {
-            logger.error(`error sending email to ${errors[p].contact.email} -- ${error}`)
-        })
+        } catch (err) {
+            logger.error(`error sending email to ${errors[p].contact.email} -- ${err}`)
+        }
+        logger.info('Finished sending emails')
     }
-    logger.info('Finished sending emails')
-}
 
-/*
-This function constructs a JSON object based on whether the printer's toner and paper are empty.
-Example:
-{
-  Myers: {
-    toner: { Yellow: 15 },
-    contact: {
-        firstname: "Jack"
-        lastname: "Heuberger"
-        email: "jackheuberger@wustl.edu"
-    }
-  },
-  Beaumont: { paper: { '4': 'Empty' }, contact: {...} },
-  Shepley: { paper: { '1': 'Empty',  '4': 'Empty' }, contact: {...} }
-}
- */
-async function queryPrinters () {
-    const printers = await Printer.find().populate('contact').lean()
-    // Reference arrays. There should probably be a better way to edit these.
-    const tonerRef = ['Black', 'Cyan', 'Magenta', 'Yellow', 'Fuser', 'Status', 'feeder?', 'img?']
-    const errors = []
-    // Iterate over all the printers
-    for (let i = 0; i < printers.length; i++) {
-        if (printers[i].email === false) {
-            continue
+    /*
+    This function constructs a JSON object based on whether the printer's toner and paper are empty.
+    Example:
+    {
+      Myers: {
+        toner: { Yellow: 15 },
+        contact: {
+            firstname: "Jack"
+            lastname: "Heuberger"
+            email: "jackheuberger@wustl.edu"
         }
-        // For each printer, iterate over its stored toner values
-        for (let tonerCount = 0; tonerCount < printers[i].toner.length; tonerCount++) {
-            // If a printer has a toner value below 15 and the value is not -3 (given by the fuser (i think?))
-            if (printers[i].toner[tonerCount] <= config.toner_email_percentage && printers[i].toner[tonerCount] != '-3') {
-                // Create the JSON objects in case they don't already exist
-                if (!errors[printers[i].location]) {
-                    errors[printers[i].location] = {}
-                    errors[printers[i].location].toner = []
-                    errors[printers[i].location].contact = printers[i].contact
+      },
+      Beaumont: { paper: { '4': 'Empty' }, contact: {...} },
+      Shepley: { paper: { '1': 'Empty',  '4': 'Empty' }, contact: {...} }
+    }
+     */
+    async function queryPrinters() {
+        const printers = await Printer.find().populate('contact').lean()
+        // Reference arrays. There should probably be a better way to edit these.
+        const tonerRef = ['Black', 'Cyan', 'Magenta', 'Yellow', 'Fuser', 'Status', 'feeder?', 'img?']
+        const errors = []
+        // Iterate over all the printers
+        for (let i = 0; i < printers.length; i++) {
+            if (printers[i].email === false) {
+                continue
+            }
+            // For each printer, iterate over its stored toner values
+            for (let tonerCount = 0; tonerCount < printers[i].toner.length; tonerCount++) {
+                // If a printer has a toner value below 15 and the value is not -3 (given by the fuser (i think?))
+                if (printers[i].toner[tonerCount] <= config.toner_email_percentage && printers[i].toner[tonerCount] !== '-3') {
+                    // Create the JSON objects in case they don't already exist
+                    if (!errors[printers[i].location]) {
+                        errors[printers[i].location] = {}
+                        errors[printers[i].location].toner = []
+                        errors[printers[i].location].contact = printers[i].contact
+                    }
+                    // Write the data to the JSON object
+                    errors[printers[i].location].toner[tonerRef[tonerCount]] = printers[i].toner[tonerCount]
                 }
-                // Write the data to the JSON object
-                errors[printers[i].location].toner[tonerRef[tonerCount]] = printers[i].toner[tonerCount]
+            }
+            // For each printer, iterate over its paper values
+            for (let paperCount = 0; paperCount < printers[i].paper.length; paperCount++) {
+                // Write the value to the JSON object if the value is false.
+                if (!printers[i].paper[paperCount]) {
+                    if (!errors[printers[i].location]) {
+                        errors[printers[i].location] = {}
+                        errors[printers[i].location].contact = printers[i].contact
+                    }
+                    if (!errors[printers[i].location].paper) {
+                        errors[printers[i].location].paper = []
+                    }
+                    errors[printers[i].location].paper[paperCount] = 'Empty'
+                }
             }
         }
-        // For each printer, iterate over its paper values
-        for (let paperCount = 0; paperCount < printers[i].paper.length; paperCount++) {
-            // Write the value to the JSON object if the value is false.
-            if (!printers[i].paper[paperCount]) {
-                if (!errors[printers[i].location]) {
-                    errors[printers[i].location] = {}
-                    errors[printers[i].location].contact = printers[i].contact
-                }
-                if (!errors[printers[i].location].paper) {
-                    errors[printers[i].location].paper = []
-                }
-                errors[printers[i].location].paper[paperCount] = 'Empty'
-            }
-        }
+        return errors
     }
-    return errors
 }
 
 module.exports = send

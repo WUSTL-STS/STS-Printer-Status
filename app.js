@@ -80,7 +80,7 @@ app.engine('.hbs', exphbs({
     defaultLayout: 'main',
     extname: '.hbs',
     helpers: {
-        getPath (name) {
+        getPath(name) {
             if (name) {
                 return '/static/' + name.replace(/ /g, '') + '.html'
             }
@@ -107,22 +107,22 @@ app.listen(port, () => {
 // Update database values and create new tables every 3 minutes
 logger.info('scheduling update and generation...')
 cron.schedule('*/3 * * * *', async () => {
-	logger.info('update triggering')
+    logger.info('update triggering')
     await updateValues()
-	console.log('finished')
+    console.log('finished')
     await generateTable()
 }, {})
 
 // Send emails every 3 hours
 logger.info('scheduling emails...')
 cron.schedule('0 */' + config.email_hours + ' * * *', async () => {
-	logger.info('sendEmail triggering')
+    logger.info('sendEmail triggering')
     sendEmail().catch(logger.error)
 }, {})
 
 logger.info('scheduling report...')
 cron.schedule('0 0 * * 1', async () => {
-	logger.info('report triggering')
+    logger.info('report triggering')
     await generateReport()
 })
 

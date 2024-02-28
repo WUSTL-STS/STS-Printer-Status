@@ -12,22 +12,23 @@ async function generateReport () {
         //     pass: process.env.EMAIL_PASS
         // }
     })
-    const msg = await transport.sendMail({
-        from: 'student.technology@wustl.edu',
-        to: process.env.REPORT_TARGET,
-        subject: 'STS Weekly Printer Status Report',
-        attachments: [
-            {
-                filename: 'report.csv',
-                content: fs.createReadStream('./logs/emails_weekly.csv')
-            }
-        ],
-        text: 'Attached is the weekly status report for STS-managed printers'
-    }).then(() => {
+    try {
+        const msg = await transport.sendMail({
+            from: 'student.technology@wustl.edu',
+            to: process.env.REPORT_TARGET,
+            subject: 'STS Weekly Printer Status Report',
+            attachments: [
+                {
+                    filename: 'report.csv',
+                    content: fs.createReadStream('./logs/emails_weekly.csv')
+                }
+            ],
+            text: 'Attached is the weekly status report for STS-managed printers'
+        })
         logger.info('Message sent: ' + msg.messageId)
-    }).catch((error) => {
-        logger.error('error sending email to ' + process.env.REPORT_TARGET + ' -- ' + error)
-    })
+    } catch (err) {
+        logger.error('error sending email to ' + process.env.REPORT_TARGET + ' -- ' + err)
+    }
 }
 
 module.exports = generateReport
