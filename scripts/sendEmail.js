@@ -91,13 +91,14 @@ async function send () {
         // Reference arrays. There should probably be a better way to edit these.
         const tonerRef = ['Black', 'Cyan', 'Magenta', 'Yellow', 'Fuser']
         const errors = []
+        const tonerValue = 4
         // Iterate over all the printers
-        for (let i = 0; i < printers.length; i++) {
+        for (let i = 0; i < printers.length - 1; i++) {
             if (printers[i].email === false) {
                 continue
             }
             // For each printer, iterate over its stored toner values
-            for (let tonerCount = 0; tonerCount < printers[i].toner.length; tonerCount++) {
+            for (let tonerCount = 0; tonerCount < tonerValue; tonerCount++) {
                 // If a printer has a toner value below 15 and the value is not -3 (given by the fuser (i think?))
                 if (printers[i].toner[tonerCount] <= config.toner_email_percentage && printers[i].toner[tonerCount] !== '-3') {
                     // Create the JSON objects in case they don't already exist
