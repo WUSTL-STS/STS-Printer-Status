@@ -89,11 +89,11 @@ async function send () {
     async function queryPrinters() {
         const printers = await Printer.find().populate('contact').lean()
         // Reference arrays. There should probably be a better way to edit these.
-        const tonerRef = ['Black', 'Cyan', 'Magenta', 'Yellow', 'Fuser']
+        const tonerRef = ['Black', 'Cyan', 'Magenta', 'Yellow', 'Fuser', 'Status', 'feeder?', 'img?']
         const errors = []
         const tonerValue = 4
         // Iterate over all the printers
-        for (let i = 0; i < printers.length - 1; i++) {
+        for (let i = 0; i < printers.length; i++) {
             if (printers[i].email === false) {
                 continue
             }
