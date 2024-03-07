@@ -36,8 +36,14 @@ async function send () {
             'have been detected with the ' + p + ' printer:</p><ul>'
         if (errors[p].toner) {
             for (const color in errors[p].toner) {
-                if ((errors[p].toner[color] !== null) && (errors[p].toner[color] !== undefined)) {
-                    html += '<li>The ' + color + ' toner is at ' + errors[p].toner[color] + '%.</li>'
+                if (errors[p].toner[color] !== null) {
+
+                    if (color === undefined){
+                        //do nothing if undefined
+                    }
+                    else{
+                        html += '<li>The ' + color + ' toner is at ' + errors[p].toner[color] + '%.</li>'
+                    }
                 }
             }
         }
