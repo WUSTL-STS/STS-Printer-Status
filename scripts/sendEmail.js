@@ -31,10 +31,14 @@ async function send () {
         await appendLog('./logs/emails_weekly.csv', date.toString() + ',' + errors[p].contact.firstname + ' ' + errors[p].contact.lastname + ',' + p + '\n')
             .catch((error) => {
                 logger.error('error writing to weekly email logfile' + error)
-            })
+            })  
+              
         let html = '<h1>STS Printer Status Report</h1><p>' + errors[p].contact.firstname + ', the following problems ' +
             'have been detected with the ' + p + ' printer:</p><ul>'
+
         if (errors[p].toner) {
+
+        
             for (const color in errors[p].toner) {
                 if (errors[p].toner[color] !== null) {
 
@@ -99,7 +103,7 @@ async function send () {
             // For each printer, iterate over its stored toner values
             for (let tonerCount = 0; tonerCount < printers[i].toner.length; tonerCount++) {
                 // If a printer has a toner value below 15 and the value is not -3 (given by the fuser (i think?))
-                if (printers[i].toner[tonerCount] <= config.toner_email_percentage && printers[i].toner[tonerCount] !== '-3') {
+                if (printers[i].toner[tonerCount] <= config.toner_email_percentage && printers[i].toner[tonerCount] !== -3) {
                     // Create the JSON objects in case they don't already exist
                     if (!errors[printers[i].location]) {
                         errors[printers[i].location] = {}
