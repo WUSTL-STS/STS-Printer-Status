@@ -105,6 +105,7 @@ async function send () {
                 // If a printer has a toner value below 15 and the value is not -3 (given by the fuser (i think?))
                 if (printers[i].toner[tonerCount] <= config.toner_email_percentage && printers[i].toner[tonerCount] !== -3) {
                     // Create the JSON objects in case they don't already exist
+
                     if (!errors[printers[i].location]) {
                         errors[printers[i].location] = {}
                         errors[printers[i].location].toner = []
@@ -129,6 +130,7 @@ async function send () {
                 }
             }
         }
+        console.log (errors)
         return errors
     }
 }
