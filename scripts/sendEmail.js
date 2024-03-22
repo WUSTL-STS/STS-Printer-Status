@@ -130,7 +130,6 @@ async function send () {
                 }
             }
         }
-        console.log (errors)
         return errors
     }
 }
