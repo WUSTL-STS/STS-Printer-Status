@@ -102,19 +102,32 @@ async function queryPrinters () {
                 errors[printers[i].location].toner[tonerRef[tonerCount]] = printers[i].toner[tonerCount]
             }
         }
-        // For each printer, iterate over its paper values
-        for (let paperCount = 0; paperCount < printers[i].paper.length; paperCount++) {
-            // Write the value to the JSON object if the value is false.
-            if (!printers[i].paper[paperCount]) {
-                if (!errors[printers[i].location]) {
-                    errors[printers[i].location] = {}
-                    errors[printers[i].location].contact = printers[i].contact
-                }
-                if (!errors[printers[i].location].paper) {
-                    errors[printers[i].location].paper = []
-                }
-                errors[printers[i].location].paper[paperCount] = 'Empty'
-            }
+       for (let i = 0; i < printers.length; i++) {
+    let emptyTrayCount = 0;  // Initialize counter for empty trays
+
+    for (let paperCount = 0; paperCount < printers[i].paper.length; paperCount++) {
+        // Check if the paper tray is empty
+        if (!printers[i].paper[paperCount]) {
+            emptyTrayCount++;  // Increment the counter for each empty tray
+        }
+    }
+
+    // Check if there are at least two empty trays
+    if (emptyTrayCount >= 2) {
+        if (!errors[printers[i].location]) {
+            errors[printers[i].location] = {};
+            errors[printers[i].location].contact = printers[i].contact;
+        }
+
+        if (!errors[printers[i].location].paper) {
+            errors[printers[i].location].paper = [];
+        }
+
+        // Record only once that there are two or more empty trays
+        errors[printers[i].location].paper.push('Two or more trays empty');
+    }
+}
+
         }
     }
     return errors
