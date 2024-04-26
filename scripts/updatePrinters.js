@@ -12,9 +12,15 @@ async function updateValues () {
         for (let i = 0; i < printers.length; i++) {
             logger.info('attempting query for ' + printers[i].location)
             try {
+                //checkpoint1
                 session = new snmp.Session({ host: printers[i].url, timeouts: [8000] }) // Create new SNMP session
+                logger.info('Past Checkpoint 1')
+                //checkpoint2
                 const toner = await fetchToner(printers[i].location)
+                logger.info('Past Checkpoint 2')
+                //checkpoint3
                 const paper = await fetchPaper(printers[i].location)
+                logger.info('Past Checkpoint 3')
                 printers[i].set('toner', toner)
                 printers[i].set('paper', paper)
                 await printers[i].save()
