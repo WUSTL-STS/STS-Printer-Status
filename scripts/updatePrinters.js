@@ -40,9 +40,21 @@ async function updateValues () {
 
 // Returns an array of length 8 representing all of the toner values. See /models/Printer
 function fetchToner (location) {
+
+    logger.info(`attemmpting toner fetch for ${location}`)
+
     return new Promise((resolve, reject) => {
+
+        logger.info('creating new array')
+
         const toner = new Array(8)
+        logger.info('getting subtree')
+
         session.getSubtree({ oid: [1, 3, 6, 1, 2, 1, 43, 11, 1, 1, 9, 1] }, function (error, varbinds) {
+            
+            logger.info('subtree generated')
+
+            
             // If error, reject the promise
             if (error) {
                 logger.error("error fetching toner for " + location + " " + error)
