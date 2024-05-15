@@ -1,5 +1,5 @@
 const snmp = require('snmp-native')
-const logger = require('../scripts/logger')
+const logger = require('./logger')
 
 const Printer = require('../models/Printer')
 
@@ -9,11 +9,12 @@ let session // Create global session variable
 async function updateValues () {
     try {
         const printers = await Printer.find() // Get a list of all the printers and iterate over them
-        for (let i = 0; i < printers.length; i++) {
-            logger.info('attempting query for ' + printers[i].location)
+        i = 0
+        logger.info('attempting query for ' + printers[i].location)
             try {
                 //checkpoint1
-                session = new snmp.Session({ host: printers[i].url, timeouts: [8000] }) // Create new SNMP session
+                logger.info(session = new snmp.Session({ host: printers[i].url, timeouts: [8000] })) // Create new SNMP session
+                session = new snmp.Session({ host: printers[i].url, timeouts: [8000] })
                 logger.info('Past Checkpoint 1')
                 //checkpoint2
                 const toner = await fetchToner(printers[i].location)
@@ -31,7 +32,7 @@ async function updateValues () {
                 printers[i].set('paper', [0,0,0,0])
                 await printers[i].save()
             }
-        }
+        
         logger.info('Finished updating printer values')
     } catch (err) {
         logger.error('scripts/updatePrinters updateValues ' + err)
@@ -50,6 +51,7 @@ function fetchToner (location) {
         const toner = new Array(8)
         logger.info('getting subtree')
 
+        logger.info(
         session.getSubtree({ oid: [1, 3, 6, 1, 2, 1, 43, 11, 1, 1, 9, 1]}, function (error, varbinds) {
             
             logger.info('subtree generated')
@@ -66,7 +68,7 @@ function fetchToner (location) {
                 logger.info(`toner fetch for ${location} successful: ${toner}`)
                 resolve(toner)
             }
-        })
+        }))
     })
 }
 
@@ -91,4 +93,4 @@ function fetchPaper (location) {
     })
 }
 
-module.exports = updateValues
+module.exports = getError

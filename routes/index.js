@@ -10,6 +10,7 @@ const updateValues = require('../scripts/updatePrinters')
 const generateTable = require('../scripts/genTable')
 const sendEmail = require('../scripts/sendEmail')
 const generateReport = require('../scripts/generateReport')
+const getError = require ('../scripts/getError')
 
 // Desc: Main index page, lists printers and management options. Lets users create new groups.
 // Route: GET /
@@ -72,6 +73,15 @@ router.get('/report', async function (req, res) {
         return
     }
     await generateReport()
+    return res.redirect('/')
+})
+
+router.get('/getError', async function (req, res) {
+    if (!req.session.loggedIn) {
+        return res.redirect('login')
+        return
+    }
+    await getError()
     return res.redirect('/')
 })
 
