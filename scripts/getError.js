@@ -6,7 +6,7 @@ const Printer = require('../models/Printer')
 let session // Create global session variable
 
 // This is the function that's called in order to update the values
-async function updateValues () {
+async function getError () {
     try {
         const printers = await Printer.find() // Get a list of all the printers and iterate over them
         i = 0
