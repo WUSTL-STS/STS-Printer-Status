@@ -50,7 +50,7 @@ function fetchToner (location) {
         const toner = new Array(8)
         logger.info('getting subtree')
 
-        session.getSubtree({ oid: [1, 3, 6, 1, 2, 1, 43, 11, 1, 1, 9, 1] , combinedTimeout: 15000}, function (error, varbinds) {
+        session.getSubtree({ oid: [1, 3, 6, 1, 2, 1, 43, 11, 1, 1, 9, 1]}, function (error, varbinds) {
             
             logger.info('subtree generated')
 
@@ -75,7 +75,7 @@ function fetchToner (location) {
 function fetchPaper (location) {
     return new Promise((resolve, reject) => {
         const paper = new Array(4)
-        session.getSubtree({ oid: [1, 3, 6, 1, 2, 1, 43, 8, 2, 1, 10], combinedTimeout: 15000 }, (error, varbinds) => {
+        session.getSubtree({ oid: [1, 3, 6, 1, 2, 1, 43, 8, 2, 1, 10]}, (error, varbinds) => {
             if (error) {
                 logger.error("error fetching paper for " + location + " " + error)
                 reject(error)
