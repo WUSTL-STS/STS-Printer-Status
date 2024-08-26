@@ -5,6 +5,22 @@ const Printer = require('../models/Printer')
 
 let session // Create global session variable
 
+/*const Docker = require('dockerode');
+const docker = new Docker();
+
+async function main() {
+    try {
+        const container = docker.getContainer('container_name');
+        
+        await container.restart({});
+        
+        console.log(`Container ${container.id} restarted`);
+    } catch (err) {
+        console.error(err);
+    }
+} */
+
+
 // This is the function that's called in order to update the values
 async function updateValues () {
     try {
@@ -49,45 +65,60 @@ function fetchToner (location) {
 
         const toner = new Array(8)
         logger.info('getting subtree')
-
-        session.getSubtree({ oid: [1, 3, 6, 1, 2, 1, 43, 11, 1, 1, 9, 1]}, function (error, varbinds) {
+        
+        try{
+            session.getSubtree({ oid: [1, 3, 6, 1, 2, 1, 43, 11, 1, 1, 9, 1]}, function (error, varbinds) {
             
-            logger.info('subtree generated')
-
-            // If error, reject the promise
-            if (error) {
-                logger.error("error fetching toner for " + location + " " + error)
-                reject(error)
-            } else {
-                // Create the array and resolve the promise using the array
-                for (let i = 0; i < varbinds.length; i++) {
-                    toner[i] = parseInt(varbinds[i].value)
+                logger.info('subtree generated')
+    
+                // If error, reject the promise
+                if (error) {
+                    logger.error("error fetching toner for " + location + " " + error)
+                    reject(error)
+                } else {
+                    // Create the array and resolve the promise using the array
+                    for (let i = 0; i < varbinds.length; i++) {
+                        toner[i] = parseInt(varbinds[i].value)
+                    }
+                    logger.info(`toner fetch for ${location} successful: ${toner}`)
+                    resolve(toner)
                 }
-                logger.info(`toner fetch for ${location} successful: ${toner}`)
-                resolve(toner)
-            }
-        })
+            })
+        }catch (err) {
+            logger.error('scripts/updatePrinters fetchToner ' + err)
+        }
+
+
     })
 }
 
 // Returns an array of length 4 representing paper tray fill
 function fetchPaper (location) {
+
     return new Promise((resolve, reject) => {
+
         const paper = new Array(4)
-        session.getSubtree({ oid: [1, 3, 6, 1, 2, 1, 43, 8, 2, 1, 10]}, (error, varbinds) => {
-            if (error) {
-                logger.error("error fetching paper for " + location + " " + error)
-                reject(error)
-            } else {
-                // 5 total tray varbinds, first is for bypass -- can be ignored
-                for (let i = 1; i < varbinds.length; i++) {
-                    // eslint-disable-next-line eqeqeq
-                    paper[i - 1] = varbinds[i].value == '-3'
+
+        try{
+            session.getSubtree({ oid: [1, 3, 6, 1, 2, 1, 43, 8, 2, 1, 10]}, (error, varbinds) => {
+
+                if (error) {
+                    logger.error("error fetching paper for " + location + " " + error)
+                    reject(error)
+                } else {
+                    // 5 total tray varbinds, first is for bypass -- can be ignored
+                    for (let i = 1; i < varbinds.length; i++) {
+                        // eslint-disable-next-line eqeqeq
+                        paper[i - 1] = varbinds[i].value == '-3'
+                    }
+                    logger.info(`paper fetch for ${location} successful: ${paper}`)
+                    resolve(paper)
                 }
-                logger.info(`paper fetch for ${location} successful: ${paper}`)
-                resolve(paper)
-            }
-        })
+            })
+        }catch (err) {
+            logger.error('scripts/updatePrinters fetchPaper ' + err)
+        }
+
     })
 }
 
