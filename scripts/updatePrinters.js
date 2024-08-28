@@ -52,6 +52,7 @@ async function updateValues () {
         logger.info('Finished updating printer values')
     } catch (err) {
         logger.error('scripts/updatePrinters updateValues ' + err)
+        session.close()
     }
 }
 
