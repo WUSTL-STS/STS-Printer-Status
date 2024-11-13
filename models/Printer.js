@@ -11,7 +11,7 @@ const PrinterSchema = new mongoose.Schema({
     },
     model: {
         type: String,
-        enum: ['M577', 'M578', 'M605', 'M608'],
+        enum: ['M577', 'M578', 'M605', 'M608', 'X57945'],
         required: true
     },
     contact: {
