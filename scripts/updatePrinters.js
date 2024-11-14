@@ -39,6 +39,7 @@ async function updateValues () {
                 logger.info('Past Checkpoint 3: got paper')
                 printers[i].set('toner', toner)
                 printers[i].set('paper', paper)
+                logger.info("Paper Values: " + paper)
                 await printers[i].save()
                 logger.info('successfully queried ' + printers[i].location)
             } catch (err) {
@@ -96,7 +97,7 @@ function fetchPaper (location) {
 
     return new Promise((resolve, reject) => {
 
-        const paper = new Array(4)
+        const paper = new Array()
 
         
         session.getSubtree({ oid: [1, 3, 6, 1, 2, 1, 43, 8, 2, 1, 10]}, (error, varbinds) => {
