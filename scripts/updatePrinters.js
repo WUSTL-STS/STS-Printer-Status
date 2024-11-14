@@ -106,9 +106,9 @@ function fetchPaper (location) {
                 reject(error)
             } else {
                 // 5 total tray varbinds, first is for bypass -- can be ignored
-                logger.info ('paper value for printer: ' + varbinds)
                 for (let i = 1; i < varbinds.length; i++) {
                     // eslint-disable-next-line eqeqeq
+                    logger.info ('paper value for printer: ' + varbinds[i].value)
                     paper[i - 1] = varbinds[i].value == '-3'
                 }
                 logger.info(`paper fetch for ${location} successful: ${paper}`)
