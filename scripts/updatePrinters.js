@@ -39,7 +39,6 @@ async function updateValues () {
                 logger.info('Past Checkpoint 3: got paper')
                 printers[i].set('toner', toner)
                 printers[i].set('paper', paper)
-                logger.info("Paper Values: " + paper)
                 await printers[i].save()
                 logger.info('successfully queried ' + printers[i].location)
             } catch (err) {
@@ -107,6 +106,7 @@ function fetchPaper (location) {
                 reject(error)
             } else {
                 // 5 total tray varbinds, first is for bypass -- can be ignored
+                logger.info ('paper value for printer: ' + varbinds)
                 for (let i = 1; i < varbinds.length; i++) {
                     // eslint-disable-next-line eqeqeq
                     paper[i - 1] = varbinds[i].value == '-3'
