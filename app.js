@@ -8,6 +8,7 @@ const cookieParser = require('cookie-parser')
 const session = require('express-session')
 const cron = require('node-cron')
 const fileUpload = require('express-fileupload')
+const Docker = require('dockerode')
 
 const connectDB = require('./config/db')
 const updateValues = require('./scripts/updatePrinters')
@@ -117,7 +118,7 @@ cron.schedule('*/3 * * * *', async () => {
 logger.info('scheduling emails...')
 cron.schedule('0 */' + config.email_hours + ' * * *', async () => {
     logger.info('sendEmail triggering')
-    sendEmail().catch(logger.error)
+    await sendEmail().catch(logger.error)
 }, {})
 
 logger.info('scheduling report...')
@@ -125,4 +126,21 @@ cron.schedule('0 0 * * 1', async () => {
     logger.info('report triggering')
     await generateReport()
 })
+
+//restart container daily
+const docker = new Docker()
+logger.info('scheduling restart...')
+cron.schedule('0 8 * * *', async () => {
+    logger.info('Restart scheduled for 8AM')
+    try {
+        const container = docker.getContainer('printerstatus');
+        
+        await container.restart({});
+        
+        console.log(`Container ${container.id} restarted`);
+    } catch (err) {
+        console.error(err);
+    }
+
+}, {})
 
