@@ -130,17 +130,17 @@ cron.schedule('0 0 * * 1', async () => {
 //restart container daily
 const docker = new Docker()
 logger.info('scheduling restart...')
-cron.schedule('0 8 * * *', async () => {
+cron.schedule('0 8 * * *', () => {
     logger.info('Restart scheduled for 8AM')
     try {
         const container = docker.getContainer('printerstatus');
         
-        await container.restart({});
+        container.restart({});
         
         console.log(`Container ${container.id} restarted`);
     } catch (err) {
         console.error(err);
     }
 
-}, {})
+})
 
