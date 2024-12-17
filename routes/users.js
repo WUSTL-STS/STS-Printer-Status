@@ -97,6 +97,7 @@ router.post('/import', async (req, res) => {
 // Route: DELETE /groups/:id
 router.delete('/:id', async (req, res) => {
     try {
+        logger.log('generating printer list')
         const userPrinters = await Printer.find({ contact: req.params.id })
         logger.log('trying to delete user with id ' + req.params.id)
         if (userPrinters && userPrinters.length) {
@@ -109,7 +110,7 @@ router.delete('/:id', async (req, res) => {
             logger.error('Could not delete user with id ' + req.params.id + '. They are still associated with printers')
             return res.redirect('/users')
         } else {
-            await User.deleteOne({ _id: req.params.id })
+            await User.findByIdAndDelete({ _id: req.params.id })
             req.session.message = {
                 type: 'primary',
                 message: 'Success!'
