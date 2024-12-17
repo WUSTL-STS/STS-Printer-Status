@@ -96,20 +96,8 @@ router.post('/import', async (req, res) => {
 // Desc: The endpoint for DELETE requests to delete users.
 // Route: DELETE /groups/:id
 router.delete('/:id', async (req, res) => {
-    try {
-        logger.log('generating printer list')
-        const userPrinters = await Printer.find({ contact: req.params.id })
-        logger.log('trying to delete user with id ' + req.params.id)
-        if (userPrinters && userPrinters.length) {
-            logger.warn('cannot delete, user is associated with printers')
-            req.session.message = {
-                type: 'danger',
-                title: 'This user is still associated with some printers!',
-                message: 'Please delete the printers that this user is associated with before deleting this user.'
-            }
-            logger.error('Could not delete user with id ' + req.params.id + '. They are still associated with printers')
-            return res.redirect('/users')
-        } else {
+    try {            
+            logger.info("attempting to delete user")
             await User.findByIdAndDelete({ _id: req.params.id })
             req.session.message = {
                 type: 'primary',
@@ -117,7 +105,7 @@ router.delete('/:id', async (req, res) => {
             }
             logger.info('deletion successful')
             return res.redirect('/users')
-        }
+
     } catch (err) {
         logger.error(err)
         return res.render('error/505')
