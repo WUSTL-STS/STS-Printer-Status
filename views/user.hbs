@@ -54,7 +54,7 @@
                 <td>{{lastname}}</td>
                 <td>{{email}}</td>
                 <td>
-                    <form action="/users/:id" method="POST">
+                    <form action="/users/{{_id}}" method="POST">
                         <input type="hidden" name="_method" value="delete">
                         <button type="submit" class="btn btn-danger"><i class="bi bi-trash-fill"></i></button>
                     </form>
