@@ -27,6 +27,7 @@ async function send () {
     })
     // Iterate over the error json array and construct the string of html
     const date = new Date()
+
     for (const p in errors) {
         await appendLog('./logs/emails_weekly.csv', date.toString() + ',' + errors[p].contact.firstname + ' ' + errors[p].contact.lastname + ',' + p + '\n')
             .catch((error) => {
@@ -35,10 +36,11 @@ async function send () {
               
         let html = '<h1>STS Printer Status Report</h1><p>' + errors[p].contact.firstname + ', the following problems ' +
             'have been detected with the ' + p + ' printer:</p><ul>'
+        
+        var tonerFlag = false
+        var paperFlag = false
 
         if (errors[p].toner) {
-
-        
             for (const color in errors[p].toner) {
                 if (errors[p].toner[color] !== null) {
 
@@ -46,6 +48,7 @@ async function send () {
                         //do nothing if undefined
                     }
                     else{
+                        tonerFlag = true
                         html += '<li>The ' + color + ' toner is at ' + errors[p].toner[color] + '%.</li>'
                     }
                 }
@@ -54,6 +57,7 @@ async function send () {
         if (errors[p].paper) {
             for (let tray = 0; tray < errors[p].paper.length; tray++) {
                 if (errors[p].paper[tray] === 'Empty' && errors[p].paper[tray] !== null) {
+                    paperFlag = true
                     html += '<li>Tray ' + (tray + 1) + ' empty.</li>'
                 }
             }
@@ -61,13 +65,15 @@ async function send () {
         logger.info(`Sending To ${errors[p].contact.email}`)
         html += '</ul><p>Please fix these issues when possible.</p>'
         try {
-            const msg = await transport.sendMail({
-                from: 'student.technology@wustl.edu',
-                to: errors[p].contact.email,
-                subject: 'STS Printer Status Alert',
-                html: html
-            })
-            logger.info('Message sent: %s', msg.messageId)
+            if (tonerFlag || paperFlag){
+                const msg = await transport.sendMail({
+                    from: 'student.technology@wustl.edu',
+                    to: errors[p].contact.email,
+                    subject: 'STS Printer Status Alert',
+                    html: html
+                })
+                logger.info('Message sent: %s', msg.messageId)
+            }
         } catch (err) {
             logger.error(`error sending email to ${errors[p].contact.email} -- ${err}`)
         }
@@ -95,8 +101,10 @@ async function send () {
         // Reference arrays. There should probably be a better way to edit these.
         const tonerRef = ['Black', 'Cyan', 'Magenta', 'Yellow', 'Fuser', 'Status', 'feeder?', 'img?']
         const errors = []
+
         // Iterate over all the printers
         for (let i = 0; i < printers.length; i++) {
+
             if (printers[i].email === false) {
                 continue
             }
@@ -115,6 +123,7 @@ async function send () {
                     errors[printers[i].location].toner[tonerRef[tonerCount]] = printers[i].toner[tonerCount]
                 }
             }
+
             // For each printer, iterate over its paper values
             for (let paperCount = 0; paperCount < printers[i].paper.length; paperCount++) {
                 // Write the value to the JSON object if the value is false.
